@@ -1,6 +1,7 @@
 package com.superfume_movil.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -11,6 +12,7 @@ import com.superfume_movil.ui.screens.cart.CartScreen
 import com.superfume_movil.ui.screens.home.HomeScreen
 import com.superfume_movil.ui.screens.perfume.PerfumeDetailScreen
 import com.superfume_movil.ui.screens.profile.ProfileScreen
+import com.superfume_movil.ui.viewmodel.ViewModelAutenticacion
 import com.superfume_movil.util.Constantes
 
 /**
@@ -19,12 +21,15 @@ import com.superfume_movil.util.Constantes
  */
 @Composable
 fun NavegacionSuperfume(navController: NavHostController) {
+    val authViewModel: ViewModelAutenticacion = hiltViewModel()
+
     NavHost(
         navController = navController,
         startDestination = Constantes.RUTA_LOGIN
     ) {
         composable(Constantes.RUTA_LOGIN) {
             LoginScreen(
+                viewModel = authViewModel,
                 onNavigateToRegister = {
                     navController.navigate(Constantes.RUTA_REGISTRO)
                 },
@@ -38,6 +43,7 @@ fun NavegacionSuperfume(navController: NavHostController) {
         
         composable(Constantes.RUTA_REGISTRO) {
             RegisterScreen(
+                viewModel = authViewModel,
                 onNavigateToLogin = {
                     navController.navigate(Constantes.RUTA_LOGIN)
                 },
@@ -96,6 +102,7 @@ fun NavegacionSuperfume(navController: NavHostController) {
         
         composable(Constantes.RUTA_PERFIL) {
             ProfileScreen(
+                authViewModel = authViewModel,
                 onNavigateBack = {
                     navController.popBackStack()
                 },

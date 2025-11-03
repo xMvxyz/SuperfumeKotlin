@@ -28,7 +28,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.runtime.collectAsState
 import com.superfume_movil.data.model.Usuario
 import com.superfume_movil.ui.viewmodel.ViewModelAutenticacion
@@ -38,7 +37,7 @@ import com.superfume_movil.ui.viewmodel.ViewModelAutenticacion
 fun RegisterScreen(
     onNavigateToLogin: () -> Unit,
     onNavigateToHome: () -> Unit,
-    viewModel: ViewModelAutenticacion = hiltViewModel()
+    viewModel: ViewModelAutenticacion
 ) {
     val formularioRegistro by viewModel.formularioRegistro.collectAsState()
     val estaCargando by viewModel.estaCargando.collectAsState()
@@ -65,8 +64,8 @@ fun RegisterScreen(
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF9B59B6),
-                        Color(0xFF6B73FF)
+                        Color(0xFF757575),
+                        Color(0xFF424242)
                     )
                 )
             )
@@ -146,8 +145,8 @@ fun RegisterScreen(
                             },
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = Color(0xFF6B73FF),
-                                focusedLabelColor = Color(0xFF6B73FF)
+                                focusedBorderColor = Color(0xFFBDBDBD),
+                                focusedLabelColor = Color(0xFFBDBDBD)
                             ),
                             singleLine = true
                         )
@@ -162,8 +161,8 @@ fun RegisterScreen(
                             },
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = Color(0xFF6B73FF),
-                                focusedLabelColor = Color(0xFF6B73FF)
+                                focusedBorderColor = Color(0xFFBDBDBD),
+                                focusedLabelColor = Color(0xFFBDBDBD)
                             ),
                             singleLine = true
                         )
@@ -179,8 +178,8 @@ fun RegisterScreen(
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = Color(0xFF6B73FF),
-                                focusedLabelColor = Color(0xFF6B73FF)
+                                focusedBorderColor = Color(0xFFBDBDBD),
+                                focusedLabelColor = Color(0xFFBDBDBD)
                             ),
                             singleLine = true
                         )
@@ -196,8 +195,8 @@ fun RegisterScreen(
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = Color(0xFF6B73FF),
-                                focusedLabelColor = Color(0xFF6B73FF)
+                                focusedBorderColor = Color(0xFFBDBDBD),
+                                focusedLabelColor = Color(0xFFBDBDBD)
                             ),
                             singleLine = true
                         )
@@ -209,8 +208,8 @@ fun RegisterScreen(
                             label = { Text("Dirección (Opcional)") },
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = Color(0xFF6B73FF),
-                                focusedLabelColor = Color(0xFF6B73FF)
+                                focusedBorderColor = Color(0xFFBDBDBD),
+                                focusedLabelColor = Color(0xFFBDBDBD)
                             ),
                             singleLine = true
                         )
@@ -235,8 +234,8 @@ fun RegisterScreen(
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = Color(0xFF6B73FF),
-                                focusedLabelColor = Color(0xFF6B73FF)
+                                focusedBorderColor = Color(0xFFBDBDBD),
+                                focusedLabelColor = Color(0xFFBDBDBD)
                             ),
                             singleLine = true
                         )
@@ -274,7 +273,7 @@ fun RegisterScreen(
                                 .fillMaxWidth()
                                 .height(50.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF6B73FF)
+                                containerColor = Color(0xFF616161)
                             ),
                             enabled = !estaCargando && email.isNotBlank() && password.isNotBlank() && 
                                 firstName.isNotBlank() && lastName.isNotBlank()
@@ -305,7 +304,7 @@ fun RegisterScreen(
                             TextButton(onClick = onNavigateToLogin) {
                                 Text(
                                     text = "Inicia Sesión",
-                                    color = Color(0xFF6B73FF),
+                                    color = Color(0xFFBDBDBD),
                                     fontWeight = FontWeight.Bold
                                 )
                             }
