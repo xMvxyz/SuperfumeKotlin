@@ -1,6 +1,7 @@
 package com.superfume_movil.ui.screens.profile
 
 import android.Manifest
+import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material.icons.outlined.PhotoLibrary
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,8 +36,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
+import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
+import com.superfume_movil.BuildConfig
 import com.superfume_movil.ui.viewmodel.ViewModelAutenticacion
+import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,7 +52,7 @@ fun ProfileScreen(
     val usuarioActual by authViewModel.usuarioActual.collectAsState()
 
     var showLogoutDialog by remember { mutableStateOf(false) }
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    var imageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
 
     val context = LocalContext.current
 
@@ -71,23 +76,15 @@ fun ProfileScreen(
     }
 
     val cameraPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            val newImageUri = authViewModel.createImageUri(context)
-            imageUri = newImageUri
-            cameraLauncher.launch(newImageUri)
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            if (isGranted) {
+                val uri = createImageUri(context)
+                imageUri = uri
+                cameraLauncher.launch(uri)
+            }
         }
-    }
-
-    val galleryPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            galleryLauncher.launch("image/*")
-        }
-    }
-
+    )
 
     Scaffold(
         topBar = {
@@ -214,7 +211,7 @@ fun ProfileScreen(
                                 horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                IconButton(onClick = { galleryPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE) }) {
+                                IconButton(onClick = { galleryLauncher.launch("image/*") }) {
                                     Icon(Icons.Outlined.PhotoLibrary, contentDescription = "Galería")
                                 }
                                 Spacer(modifier = Modifier.width(16.dp))
@@ -443,4 +440,17 @@ fun ProfileInfoItem(
             )
         }
     }
+}
+
+private fun createImageUri(context: Context): Uri {
+    val imageFile = File.createTempFile(
+        "JPEG_${System.currentTimeMillis()}_",
+        ".jpg",
+        context.externalCacheDir
+    )
+    return FileProvider.getUriForFile(
+        context,
+        "${BuildConfig.APPLICATION_ID}.provider",
+        imageFile
+    )
 }
