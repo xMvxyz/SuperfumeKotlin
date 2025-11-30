@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.superfume_movil"
+    namespace = "com.superfumekotlin"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.superfume_movil"
+        applicationId = "com.superfumekotlin"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -47,6 +47,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 

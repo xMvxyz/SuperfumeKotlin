@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Superfume_movil"
+rootProject.name = "SuperfumeKotlin"
 include(":app")
