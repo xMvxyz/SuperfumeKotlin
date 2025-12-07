@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.SuperfumeKotlin.data.model.Usuario
 import com.SuperfumeKotlin.data.repository.RepositorioSuperfume
-import com.SuperfumeKotlin.util.RecursosTexto
-import com.SuperfumeKotlin.util.ValidadorFormularios
+import com.SuperfumeKotlin.util.TextResources
+import com.SuperfumeKotlin.util.FormValidators
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -81,15 +81,15 @@ class ViewModelAutenticacion @Inject constructor(
      * @param contraseña Contraseña del usuario
      */
     fun iniciarSesion(email: String, contraseña: String) {
-        val validacionEmail = ValidadorFormularios.validarEmail(email)
-        if (!validacionEmail.esValido) {
-            _mensajeError.value = validacionEmail.mensajeError
+        val validacionEmail = FormValidators.validateEmail(email)
+        if (!validacionEmail.isValid) {
+            _mensajeError.value = validacionEmail.errorMessage
             return
         }
         
-        val validacionContraseña = ValidadorFormularios.validarContraseña(contraseña)
-        if (!validacionContraseña.esValido) {
-            _mensajeError.value = validacionContraseña.mensajeError
+        val validacionContraseña = FormValidators.validatePassword(contraseña)
+        if (!validacionContraseña.isValid) {
+            _mensajeError.value = validacionContraseña.errorMessage
             return
         }
         
@@ -102,7 +102,7 @@ class ViewModelAutenticacion @Inject constructor(
                     _estaLogueado.value = true
                     _mensajeError.value = null
                 } else {
-                    _mensajeError.value = RecursosTexto.ERROR_CREDENCIALES_INVALIDAS
+                    _mensajeError.value = TextResources.ERROR_INVALID_CREDENTIALS
                 }
             } catch (e: Exception) {
                 _mensajeError.value = "Error al iniciar sesión: ${e.message}"
@@ -117,27 +117,27 @@ class ViewModelAutenticacion @Inject constructor(
      * @param usuario Usuario a registrar
      */
     fun registrarUsuario(usuario: Usuario) {
-        val validacionEmail = ValidadorFormularios.validarEmail(usuario.email)
-        if (!validacionEmail.esValido) {
-            _mensajeError.value = validacionEmail.mensajeError
+        val validacionEmail = FormValidators.validateEmail(usuario.email)
+        if (!validacionEmail.isValid) {
+            _mensajeError.value = validacionEmail.errorMessage
             return
         }
         
-        val validacionContraseña = ValidadorFormularios.validarContraseña(usuario.password)
-        if (!validacionContraseña.esValido) {
-            _mensajeError.value = validacionContraseña.mensajeError
+        val validacionContraseña = FormValidators.validatePassword(usuario.password)
+        if (!validacionContraseña.isValid) {
+            _mensajeError.value = validacionContraseña.errorMessage
             return
         }
         
-        val validacionNombre = ValidadorFormularios.validarNombre(usuario.firstName)
-        if (!validacionNombre.esValido) {
-            _mensajeError.value = validacionNombre.mensajeError
+        val validacionNombre = FormValidators.validateName(usuario.firstName)
+        if (!validacionNombre.isValid) {
+            _mensajeError.value = validacionNombre.errorMessage
             return
         }
         
-        val validacionApellido = ValidadorFormularios.validarNombre(usuario.lastName)
-        if (!validacionApellido.esValido) {
-            _mensajeError.value = validacionApellido.mensajeError
+        val validacionApellido = FormValidators.validateName(usuario.lastName)
+        if (!validacionApellido.isValid) {
+            _mensajeError.value = validacionApellido.errorMessage
             return
         }
         
@@ -146,7 +146,7 @@ class ViewModelAutenticacion @Inject constructor(
             try {
                 val usuarioExistente = repositorio.obtenerUsuarioPorEmail(usuario.email)
                 if (usuarioExistente != null) {
-                    _mensajeError.value = RecursosTexto.ERROR_EMAIL_REGISTRADO
+                    _mensajeError.value = TextResources.ERROR_EMAIL_ALREADY_REGISTERED
                 } else {
                     val idUsuario = repositorio.insertarUsuario(usuario)
                     _usuarioActual.value = usuario.copy(id = idUsuario)

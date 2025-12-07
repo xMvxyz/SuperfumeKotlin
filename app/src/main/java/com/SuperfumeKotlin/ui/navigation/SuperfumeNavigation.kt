@@ -13,7 +13,7 @@ import com.SuperfumeKotlin.ui.screens.home.HomeScreen
 import com.SuperfumeKotlin.ui.screens.perfume.PerfumeDetailScreen
 import com.SuperfumeKotlin.ui.screens.profile.ProfileScreen
 import com.SuperfumeKotlin.ui.viewmodel.ViewModelAutenticacion
-import com.SuperfumeKotlin.util.Constantes
+import com.SuperfumeKotlin.util.Constants
 
 /**
  * Navegación principal de la aplicación Superfume
@@ -25,54 +25,54 @@ fun NavegacionSuperfume(navController: NavHostController) {
 
     NavHost(
         navController = navController,
-        startDestination = Constantes.RUTA_LOGIN
+        startDestination = Constants.ROUTE_LOGIN
     ) {
-        composable(Constantes.RUTA_LOGIN) {
+        composable(Constants.ROUTE_LOGIN) {
             LoginScreen(
                 viewModel = authViewModel,
                 onNavigateToRegister = {
-                    navController.navigate(Constantes.RUTA_REGISTRO)
+                    navController.navigate(Constants.ROUTE_REGISTER)
                 },
                 onNavigateToHome = {
-                    navController.navigate(Constantes.RUTA_HOME) {
-                        popUpTo(Constantes.RUTA_LOGIN) { inclusive = true }
+                    navController.navigate(Constants.ROUTE_HOME) {
+                        popUpTo(Constants.ROUTE_LOGIN) { inclusive = true }
                     }
                 }
             )
         }
         
-        composable(Constantes.RUTA_REGISTRO) {
+        composable(Constants.ROUTE_REGISTER) {
             RegisterScreen(
                 viewModel = authViewModel,
                 onNavigateToLogin = {
-                    navController.navigate(Constantes.RUTA_LOGIN)
+                    navController.navigate(Constants.ROUTE_LOGIN)
                 },
                 onNavigateToHome = {
-                    navController.navigate(Constantes.RUTA_HOME) {
-                        popUpTo(Constantes.RUTA_REGISTRO) { inclusive = true }
+                    navController.navigate(Constants.ROUTE_HOME) {
+                        popUpTo(Constants.ROUTE_REGISTER) { inclusive = true }
                     }
                 }
             )
         }
         
-        composable(Constantes.RUTA_HOME) {
+        composable(Constants.ROUTE_HOME) {
             HomeScreen(
                 onNavigateToPerfumeDetail = { perfumeId ->
-                    navController.navigate("${Constantes.RUTA_DETALLE_PERFUME.replace("{perfumeId}", perfumeId.toString())}")
+                    navController.navigate("${Constants.ROUTE_PERFUME_DETAIL.replace("{perfumeId}", perfumeId.toString())}")
                 },
                 onNavigateToCart = {
-                    navController.navigate(Constantes.RUTA_CARRITO)
+                    navController.navigate(Constants.ROUTE_CART)
                 },
                 onNavigateToProfile = {
-                    navController.navigate(Constantes.RUTA_PERFIL)
+                    navController.navigate(Constants.ROUTE_PROFILE)
                 },
                 onNavigateToAddPerfume = {
-                    navController.navigate(Constantes.RUTA_AGREGAR_PERFUME)
+                    navController.navigate(Constants.ROUTE_ADD_PERFUME)
                 }
             )
         }
         
-        composable(Constantes.RUTA_DETALLE_PERFUME) { backStackEntry ->
+        composable(Constants.ROUTE_PERFUME_DETAIL) { backStackEntry ->
             val perfumeId = backStackEntry.arguments?.getString("perfumeId")?.toLongOrNull()
             if (perfumeId != null) {
                 PerfumeDetailScreen(
@@ -81,41 +81,41 @@ fun NavegacionSuperfume(navController: NavHostController) {
                         navController.popBackStack()
                     },
                     onNavigateToCart = {
-                        navController.navigate(Constantes.RUTA_CARRITO)
+                        navController.navigate(Constants.ROUTE_CART)
                     }
                 )
             }
         }
         
-        composable(Constantes.RUTA_CARRITO) {
+        composable(Constants.ROUTE_CART) {
             CartScreen(
                 authViewModel = authViewModel,
                 onNavigateBack = {
                     navController.popBackStack()
                 },
                 onNavigateToHome = {
-                    navController.navigate(Constantes.RUTA_HOME) {
-                        popUpTo(Constantes.RUTA_CARRITO) { inclusive = true }
+                    navController.navigate(Constants.ROUTE_HOME) {
+                        popUpTo(Constants.ROUTE_CART) { inclusive = true }
                     }
                 }
             )
         }
         
-        composable(Constantes.RUTA_PERFIL) {
+        composable(Constants.ROUTE_PROFILE) {
             ProfileScreen(
                 authViewModel = authViewModel,
                 onNavigateBack = {
                     navController.popBackStack()
                 },
                 onNavigateToLogin = {
-                    navController.navigate(Constantes.RUTA_LOGIN) {
-                        popUpTo(Constantes.RUTA_PERFIL) { inclusive = true }
+                    navController.navigate(Constants.ROUTE_LOGIN) {
+                        popUpTo(Constants.ROUTE_PROFILE) { inclusive = true }
                     }
                 }
             )
         }
         
-        composable(Constantes.RUTA_AGREGAR_PERFUME) {
+        composable(Constants.ROUTE_ADD_PERFUME) {
             AddPerfumeScreen(
                 onNavigateBack = {
                     navController.popBackStack()

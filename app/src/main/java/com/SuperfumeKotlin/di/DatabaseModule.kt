@@ -7,7 +7,7 @@ import com.SuperfumeKotlin.data.dao.DaoPerfume
 import com.SuperfumeKotlin.data.dao.DaoUsuario
 import com.SuperfumeKotlin.data.database.BaseDatosSuperfume
 import com.SuperfumeKotlin.data.repository.RepositorioSuperfume
-import com.SuperfumeKotlin.util.Constantes
+import com.SuperfumeKotlin.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,7 +34,7 @@ object ModuloBaseDatos {
         return Room.databaseBuilder(
             context.applicationContext,
             BaseDatosSuperfume::class.java,
-            Constantes.NOMBRE_BASE_DATOS
+            Constants.DATABASE_NAME
         ).build()
     }
     

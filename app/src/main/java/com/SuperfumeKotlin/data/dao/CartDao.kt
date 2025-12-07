@@ -2,7 +2,7 @@ package com.SuperfumeKotlin.data.dao
 
 import androidx.room.*
 import com.SuperfumeKotlin.data.model.ElementoCarrito
-import com.SuperfumeKotlin.util.Constantes
+import com.SuperfumeKotlin.util.Constants
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -17,7 +17,7 @@ interface DaoCarrito {
      * @param idUsuario ID del usuario
      * @return Flow con la lista de elementos del carrito
      */
-    @Query("SELECT * FROM ${Constantes.TABLA_CARRITO} WHERE userId = :idUsuario")
+    @Query("SELECT * FROM ${Constants.TABLE_CART} WHERE userId = :idUsuario")
     fun obtenerElementosCarritoPorUsuario(idUsuario: Long): Flow<List<ElementoCarrito>>
     
     /**
@@ -26,7 +26,7 @@ interface DaoCarrito {
      * @param idPerfume ID del perfume
      * @return Elemento del carrito o null si no existe
      */
-    @Query("SELECT * FROM ${Constantes.TABLA_CARRITO} WHERE userId = :idUsuario AND perfumeId = :idPerfume")
+    @Query("SELECT * FROM ${Constants.TABLE_CART} WHERE userId = :idUsuario AND perfumeId = :idPerfume")
     suspend fun obtenerElementoCarrito(idUsuario: Long, idPerfume: Long): ElementoCarrito?
     
     /**
@@ -55,10 +55,10 @@ interface DaoCarrito {
      * Vacía completamente el carrito de un usuario
      * @param idUsuario ID del usuario
      */
-    @Query("DELETE FROM ${Constantes.TABLA_CARRITO} WHERE userId = :idUsuario")
+    @Query("DELETE FROM ${Constants.TABLE_CART} WHERE userId = :idUsuario")
     suspend fun vaciarCarrito(idUsuario: Long)
     
-    @Query("DELETE FROM ${Constantes.TABLA_CARRITO} WHERE userId = :idUsuario AND perfumeId = :idPerfume")
+    @Query("DELETE FROM ${Constants.TABLE_CART} WHERE userId = :idUsuario AND perfumeId = :idPerfume")
     suspend fun eliminarDelCarrito(idUsuario: Long, idPerfume: Long)
     
     /**

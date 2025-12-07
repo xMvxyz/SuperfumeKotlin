@@ -2,7 +2,7 @@ package com.SuperfumeKotlin.data.dao
 
 import androidx.room.*
 import com.SuperfumeKotlin.data.model.Perfume
-import com.SuperfumeKotlin.util.Constantes
+import com.SuperfumeKotlin.util.Constants
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -16,7 +16,7 @@ interface DaoPerfume {
      * Obtiene todos los perfumes disponibles
      * @return Flow con la lista de perfumes disponibles
      */
-    @Query("SELECT * FROM ${Constantes.TABLA_PERFUMES} WHERE isAvailable = 1")
+    @Query("SELECT * FROM ${Constants.TABLE_PERFUMES} WHERE isAvailable = 1")
     fun obtenerTodosLosPerfumesDisponibles(): Flow<List<Perfume>>
     
     /**
@@ -24,7 +24,7 @@ interface DaoPerfume {
      * @param id ID del perfume
      * @return Perfume encontrado o null
      */
-    @Query("SELECT * FROM ${Constantes.TABLA_PERFUMES} WHERE id = :id")
+    @Query("SELECT * FROM ${Constants.TABLE_PERFUMES} WHERE id = :id")
     suspend fun obtenerPerfumePorId(id: Long): Perfume?
     
     /**
@@ -32,7 +32,7 @@ interface DaoPerfume {
      * @param consultaBusqueda Texto de búsqueda
      * @return Flow con la lista de perfumes encontrados
      */
-    @Query("SELECT * FROM ${Constantes.TABLA_PERFUMES} WHERE name LIKE '%' || :consultaBusqueda || '%' OR brand LIKE '%' || :consultaBusqueda || '%'")
+    @Query("SELECT * FROM ${Constants.TABLE_PERFUMES} WHERE name LIKE '%' || :consultaBusqueda || '%' OR brand LIKE '%' || :consultaBusqueda || '%'")
     fun buscarPerfumes(consultaBusqueda: String): Flow<List<Perfume>>
     
     /**
@@ -40,7 +40,7 @@ interface DaoPerfume {
      * @param categoria Categoría a filtrar
      * @return Flow con la lista de perfumes de la categoría
      */
-    @Query("SELECT * FROM ${Constantes.TABLA_PERFUMES} WHERE category = :categoria")
+    @Query("SELECT * FROM ${Constants.TABLE_PERFUMES} WHERE category = :categoria")
     fun obtenerPerfumesPorCategoria(categoria: String): Flow<List<Perfume>>
     
     /**
@@ -48,7 +48,7 @@ interface DaoPerfume {
      * @param genero Género a filtrar
      * @return Flow con la lista de perfumes del género
      */
-    @Query("SELECT * FROM ${Constantes.TABLA_PERFUMES} WHERE gender = :genero")
+    @Query("SELECT * FROM ${Constants.TABLE_PERFUMES} WHERE gender = :genero")
     fun obtenerPerfumesPorGenero(genero: String): Flow<List<Perfume>>
     
     /**
@@ -78,6 +78,6 @@ interface DaoPerfume {
      * @param idPerfume ID del perfume
      * @param nuevoStock Nuevo valor de stock
      */
-    @Query("UPDATE ${Constantes.TABLA_PERFUMES} SET stock = :nuevoStock WHERE id = :idPerfume")
+    @Query("UPDATE ${Constants.TABLE_PERFUMES} SET stock = :nuevoStock WHERE id = :idPerfume")
     suspend fun actualizarStock(idPerfume: Long, nuevoStock: Int)
 }

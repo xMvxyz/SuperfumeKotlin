@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.SuperfumeKotlin.data.model.Usuario
 import com.SuperfumeKotlin.ui.viewmodel.ViewModelAutenticacion
-import com.SuperfumeKotlin.util.ResultadoValidacion
-import com.SuperfumeKotlin.util.ValidadorFormularios
+import com.SuperfumeKotlin.util.ValidationResult
+import com.SuperfumeKotlin.util.FormValidators
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,12 +50,12 @@ fun RegisterScreen(
     var passwordVisible by remember { mutableStateOf(false) }
 
     // Validations
-    val nombreValidation = remember(firstName) { ValidadorFormularios.validarNombre(firstName) }
-    val apellidoValidation = remember(lastName) { ValidadorFormularios.validarNombre(lastName) }
-    val emailValidation = remember(email) { ValidadorFormularios.validarEmail(email) }
-    val telefonoValidation = remember(phone) { ValidadorFormularios.validarTelefono(phone) }
-    val direccionValidation = remember(address) { ValidadorFormularios.validarDireccion(address) }
-    val passwordValidation = remember(password) { ValidadorFormularios.validarContraseña(password) }
+    val nombreValidation = remember(firstName) { FormValidators.validateName(firstName) }
+    val apellidoValidation = remember(lastName) { FormValidators.validateName(lastName) }
+    val emailValidation = remember(email) { FormValidators.validateEmail(email) }
+    val telefonoValidation = remember(phone) { FormValidators.validatePhone(phone) }
+    val direccionValidation = remember(address) { FormValidators.validateAddress(address) }
+    val passwordValidation = remember(password) { FormValidators.validatePassword(password) }
 
     LaunchedEffect(estaLogueado) {
         if (estaLogueado) {
@@ -107,19 +107,19 @@ fun RegisterScreen(
                     Text("Crear Cuenta", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFF2C3E50), modifier = Modifier.padding(bottom = 8.dp))
 
                     // Nombre
-                    OutlinedTextField(value = firstName, onValueChange = { firstName = it }, label = { Text("Nombre") }, isError = !nombreValidation.esValido && firstName.isNotEmpty(), supportingText = { if (!nombreValidation.esValido && firstName.isNotEmpty()) Text(nombreValidation.mensajeError ?: "") })
+                    OutlinedTextField(value = firstName, onValueChange = { firstName = it }, label = { Text("Nombre") }, isError = !nombreValidation.isValid && firstName.isNotEmpty(), supportingText = { if (!nombreValidation.isValid && firstName.isNotEmpty()) Text(nombreValidation.errorMessage ?: "") })
                     
                     // Apellido
-                    OutlinedTextField(value = lastName, onValueChange = { lastName = it }, label = { Text("Apellido") }, isError = !apellidoValidation.esValido && lastName.isNotEmpty(), supportingText = { if (!apellidoValidation.esValido && lastName.isNotEmpty()) Text(apellidoValidation.mensajeError ?: "") })
+                    OutlinedTextField(value = lastName, onValueChange = { lastName = it }, label = { Text("Apellido") }, isError = !apellidoValidation.isValid && lastName.isNotEmpty(), supportingText = { if (!apellidoValidation.isValid && lastName.isNotEmpty()) Text(apellidoValidation.errorMessage ?: "") })
 
                     // Email
-                    OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email), isError = !emailValidation.esValido && email.isNotEmpty(), supportingText = { if (!emailValidation.esValido && email.isNotEmpty()) Text(emailValidation.mensajeError ?: "") })
+                    OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email), isError = !emailValidation.isValid && email.isNotEmpty(), supportingText = { if (!emailValidation.isValid && email.isNotEmpty()) Text(emailValidation.errorMessage ?: "") })
 
                     // Telefono
-                    OutlinedTextField(value = phone, onValueChange = { phone = it }, label = { Text("Teléfono") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), isError = !telefonoValidation.esValido && phone.isNotEmpty(), supportingText = { if (!telefonoValidation.esValido && phone.isNotEmpty()) Text(telefonoValidation.mensajeError ?: "") })
+                    OutlinedTextField(value = phone, onValueChange = { phone = it }, label = { Text("Teléfono") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), isError = !telefonoValidation.isValid && phone.isNotEmpty(), supportingText = { if (!telefonoValidation.isValid && phone.isNotEmpty()) Text(telefonoValidation.errorMessage ?: "") })
                     
                     // Direccion
-                    OutlinedTextField(value = address, onValueChange = { address = it }, label = { Text("Dirección") }, isError = !direccionValidation.esValido && address.isNotEmpty(), supportingText = { if (!direccionValidation.esValido && address.isNotEmpty()) Text(direccionValidation.mensajeError ?: "") })
+                    OutlinedTextField(value = address, onValueChange = { address = it }, label = { Text("Dirección") }, isError = !direccionValidation.isValid && address.isNotEmpty(), supportingText = { if (!direccionValidation.isValid && address.isNotEmpty()) Text(direccionValidation.errorMessage ?: "") })
 
                     // Contraseña
                     OutlinedTextField(
@@ -132,8 +132,8 @@ fun RegisterScreen(
                                 Icon(if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility, "Toggle password visibility")
                             }
                         },
-                        isError = !passwordValidation.esValido && password.isNotEmpty(),
-                        supportingText = { if (!passwordValidation.esValido && password.isNotEmpty()) Text(passwordValidation.mensajeError ?: "") }
+                        isError = !passwordValidation.isValid && password.isNotEmpty(),
+                        supportingText = { if (!passwordValidation.isValid && password.isNotEmpty()) Text(passwordValidation.errorMessage ?: "") }
                     )
 
                     AnimatedVisibility(visible = mensajeError != null) {
@@ -148,12 +148,12 @@ fun RegisterScreen(
                         modifier = Modifier.fillMaxWidth().padding(top = 8.dp).height(50.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6B73FF)),
                         enabled = !estaCargando && 
-                                nombreValidation.esValido && 
-                                apellidoValidation.esValido && 
-                                emailValidation.esValido && 
-                                telefonoValidation.esValido && 
-                                direccionValidation.esValido && 
-                                passwordValidation.esValido
+                                nombreValidation.isValid && 
+                                apellidoValidation.isValid && 
+                                emailValidation.isValid && 
+                                telefonoValidation.isValid && 
+                                direccionValidation.isValid && 
+                                passwordValidation.isValid
                     ) {
                         if (estaCargando) {
                             CircularProgressIndicator(color = Color.White, modifier = Modifier.size(20.dp))

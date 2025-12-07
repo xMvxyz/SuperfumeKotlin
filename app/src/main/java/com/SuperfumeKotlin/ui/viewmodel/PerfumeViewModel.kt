@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.SuperfumeKotlin.data.model.Perfume
 import com.SuperfumeKotlin.data.repository.RepositorioSuperfume
-import com.SuperfumeKotlin.util.Constantes
+import com.SuperfumeKotlin.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,10 +27,10 @@ class ViewModelPerfume @Inject constructor(
     private val _consultaBusqueda = MutableStateFlow("")
     val consultaBusqueda: StateFlow<String> = _consultaBusqueda.asStateFlow()
     
-    private val _categoriaSeleccionada = MutableStateFlow(Constantes.CATEGORIAS_PERFUMES[0])
+    private val _categoriaSeleccionada = MutableStateFlow(Constants.PERFUME_CATEGORIES[0])
     val categoriaSeleccionada: StateFlow<String> = _categoriaSeleccionada.asStateFlow()
     
-    private val _generoSeleccionado = MutableStateFlow(Constantes.GENEROS_PERFUMES[0])
+    private val _generoSeleccionado = MutableStateFlow(Constants.PERFUME_GENDERS[0])
     val generoSeleccionado: StateFlow<String> = _generoSeleccionado.asStateFlow()
     
     private val _estaCargando = MutableStateFlow(false)
@@ -94,7 +94,7 @@ class ViewModelPerfume @Inject constructor(
         viewModelScope.launch {
             _estaCargando.value = true
             try {
-                if (categoria == Constantes.CATEGORIAS_PERFUMES[0]) {
+                if (categoria == Constants.PERFUME_CATEGORIES[0]) {
                     cargarPerfumes()
                 } else {
                     repositorio.obtenerPerfumesPorCategoria(categoria).collect { listaPerfumes ->
@@ -118,7 +118,7 @@ class ViewModelPerfume @Inject constructor(
         viewModelScope.launch {
             _estaCargando.value = true
             try {
-                if (genero == Constantes.GENEROS_PERFUMES[0]) {
+                if (genero == Constants.PERFUME_GENDERS[0]) {
                     cargarPerfumes()
                 } else {
                     repositorio.obtenerPerfumesPorGenero(genero).collect { listaPerfumes ->

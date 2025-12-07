@@ -2,7 +2,7 @@ package com.SuperfumeKotlin.data.dao
 
 import androidx.room.*
 import com.SuperfumeKotlin.data.model.Usuario
-import com.SuperfumeKotlin.util.Constantes
+import com.SuperfumeKotlin.util.Constants
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -18,7 +18,7 @@ interface DaoUsuario {
      * @param contraseña Contraseña del usuario
      * @return Usuario autenticado o null si las credenciales son inválidas
      */
-    @Query("SELECT * FROM ${Constantes.TABLA_USUARIOS} WHERE email = :email AND password = :contraseña")
+    @Query("SELECT * FROM ${Constants.TABLE_USERS} WHERE email = :email AND password = :contraseña")
     suspend fun autenticarUsuario(email: String, contraseña: String): Usuario?
     
     /**
@@ -26,7 +26,7 @@ interface DaoUsuario {
      * @param email Email del usuario
      * @return Usuario encontrado o null
      */
-    @Query("SELECT * FROM ${Constantes.TABLA_USUARIOS} WHERE email = :email")
+    @Query("SELECT * FROM ${Constants.TABLE_USERS} WHERE email = :email")
     suspend fun obtenerUsuarioPorEmail(email: String): Usuario?
     
     /**
@@ -34,7 +34,7 @@ interface DaoUsuario {
      * @param id ID del usuario
      * @return Usuario encontrado o null
      */
-    @Query("SELECT * FROM ${Constantes.TABLA_USUARIOS} WHERE id = :id")
+    @Query("SELECT * FROM ${Constants.TABLE_USERS} WHERE id = :id")
     suspend fun obtenerUsuarioPorId(id: Long): Usuario?
     
     /**

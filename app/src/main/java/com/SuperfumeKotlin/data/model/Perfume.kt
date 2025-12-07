@@ -2,7 +2,7 @@ package com.SuperfumeKotlin.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.SuperfumeKotlin.util.Constantes
+import com.SuperfumeKotlin.util.Constants
 
 /**
  * Entidad que representa un perfume en la base de datos
@@ -19,7 +19,7 @@ import com.SuperfumeKotlin.util.Constantes
  * @property isAvailable Indica si el perfume está disponible para venta
  * @property stock Cantidad disponible en inventario
  */
-@Entity(tableName = Constantes.TABLA_PERFUMES)
+@Entity(tableName = Constants.TABLE_PERFUMES)
 data class Perfume(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,

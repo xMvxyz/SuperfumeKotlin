@@ -19,9 +19,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.SuperfumeKotlin.util.RecursosTexto
-import com.SuperfumeKotlin.util.ValidadorFormularios
-import com.SuperfumeKotlin.util.ResultadoValidacion
+import com.SuperfumeKotlin.util.TextResources
+import com.SuperfumeKotlin.util.FormValidators
+import com.SuperfumeKotlin.util.ValidationResult
 
 /**
  * Campo de texto con validación integrada
@@ -37,11 +37,11 @@ fun CampoTextoValidado(
     onIconoFinalClick: (() -> Unit)? = null,
     opcionesTeclado: KeyboardOptions = KeyboardOptions.Default,
     transformacionVisual: VisualTransformation = VisualTransformation.None,
-    validacion: (String) -> ResultadoValidacion,
+    validacion: (String) -> ValidationResult,
     modificador: Modifier = Modifier,
     unaLinea: Boolean = true
 ) {
-    val resultadoValidacion = remember(valor) { validacion(valor) }
+    val ValidationResult = remember(valor) { validacion(valor) }
     
     Column(modifier = modificador) {
         OutlinedTextField(
@@ -61,10 +61,10 @@ fun CampoTextoValidado(
             keyboardOptions = opcionesTeclado,
             visualTransformation = transformacionVisual,
             singleLine = unaLinea,
-            isError = !resultadoValidacion.esValido && valor.isNotEmpty(),
+            isError = !ValidationResult.isValid && valor.isNotEmpty(),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = if (resultadoValidacion.esValido) Color(0xFF6B73FF) else Color(0xFFD32F2F),
-                focusedLabelColor = if (resultadoValidacion.esValido) Color(0xFF6B73FF) else Color(0xFFD32F2F),
+                focusedBorderColor = if (ValidationResult.isValid) Color(0xFF6B73FF) else Color(0xFFD32F2F),
+                focusedLabelColor = if (ValidationResult.isValid) Color(0xFF6B73FF) else Color(0xFFD32F2F),
                 errorBorderColor = Color(0xFFD32F2F),
                 errorLabelColor = Color(0xFFD32F2F)
             ),
@@ -73,7 +73,7 @@ fun CampoTextoValidado(
         
         // Mensaje de error con animación
         AnimatedVisibility(
-            visible = !resultadoValidacion.esValido && valor.isNotEmpty(),
+            visible = !ValidationResult.isValid && valor.isNotEmpty(),
             enter = fadeIn(animationSpec = tween(300))
         ) {
             Row(
@@ -88,7 +88,7 @@ fun CampoTextoValidado(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = resultadoValidacion.mensajeError ?: "",
+                    text = ValidationResult.errorMessage ?: "",
                     color = Color(0xFFD32F2F),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium
@@ -98,7 +98,7 @@ fun CampoTextoValidado(
         
         // Indicador de éxito
         AnimatedVisibility(
-            visible = resultadoValidacion.esValido && valor.isNotEmpty(),
+            visible = ValidationResult.isValid && valor.isNotEmpty(),
             enter = fadeIn(animationSpec = tween(300))
         ) {
             Row(
@@ -113,7 +113,7 @@ fun CampoTextoValidado(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = RecursosTexto.EXITO_CAMPO_VALIDO,
+                    text = TextResources.SUCCESS_VALID_FIELD,
                     color = Color(0xFF4CAF50),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium
@@ -123,10 +123,3 @@ fun CampoTextoValidado(
     }
 }
 
-// Funciones de validación específicas usando el validador centralizado
-fun validarEmail(email: String): ResultadoValidacion = ValidadorFormularios.validarEmail(email)
-fun validarContraseña(contraseña: String): ResultadoValidacion = ValidadorFormularios.validarContraseña(contraseña)
-fun validarNombre(nombre: String): ResultadoValidacion = ValidadorFormularios.validarNombre(nombre)
-fun validarTelefono(telefono: String): ResultadoValidacion = ValidadorFormularios.validarTelefono(telefono)
-fun validarPrecio(precio: String): ResultadoValidacion = ValidadorFormularios.validarPrecio(precio)
-fun validarStock(stock: String): ResultadoValidacion = ValidadorFormularios.validarStock(stock)

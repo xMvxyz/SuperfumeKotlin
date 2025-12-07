@@ -10,7 +10,7 @@ import com.SuperfumeKotlin.data.dao.DaoUsuario
 import com.SuperfumeKotlin.data.model.ElementoCarrito
 import com.SuperfumeKotlin.data.model.Perfume
 import com.SuperfumeKotlin.data.model.Usuario
-import com.SuperfumeKotlin.util.Constantes
+import com.SuperfumeKotlin.util.Constants
 
 /**
  * Base de datos principal de la aplicación Superfume
@@ -18,7 +18,7 @@ import com.SuperfumeKotlin.util.Constantes
  */
 @Database(
     entities = [Perfume::class, Usuario::class, ElementoCarrito::class],
-    version = Constantes.VERSION_BASE_DATOS,
+    version = Constants.DATABASE_VERSION,
     exportSchema = false
 )
 abstract class BaseDatosSuperfume : RoomDatabase() {
@@ -35,7 +35,7 @@ abstract class BaseDatosSuperfume : RoomDatabase() {
                 val instancia = Room.databaseBuilder(
                     context.applicationContext,
                     BaseDatosSuperfume::class.java,
-                    Constantes.NOMBRE_BASE_DATOS
+                    Constants.DATABASE_NAME
                 ).build()
                 INSTANCIA = instancia
                 instancia

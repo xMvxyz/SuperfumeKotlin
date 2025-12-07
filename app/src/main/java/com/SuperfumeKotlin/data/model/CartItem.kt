@@ -2,7 +2,7 @@ package com.SuperfumeKotlin.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.SuperfumeKotlin.util.Constantes
+import com.SuperfumeKotlin.util.Constants
 
 /**
  * Entidad que representa un elemento del carrito de compras
@@ -13,7 +13,7 @@ import com.SuperfumeKotlin.util.Constantes
  * @property quantity Cantidad del perfume en el carrito
  * @property addedAt Timestamp de cuando se agregó al carrito
  */
-@Entity(tableName = Constantes.TABLA_CARRITO)
+@Entity(tableName = Constants.TABLE_CART)
 data class ElementoCarrito(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,

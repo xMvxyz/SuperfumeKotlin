@@ -30,9 +30,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
 import com.SuperfumeKotlin.ui.viewmodel.ViewModelAutenticacion
 import com.SuperfumeKotlin.ui.components.CampoTextoValidado
-import com.SuperfumeKotlin.util.RecursosTexto
-import com.SuperfumeKotlin.util.ValidadorFormularios.validarEmail
-import com.SuperfumeKotlin.util.ValidadorFormularios.validarContraseña
+import com.SuperfumeKotlin.util.TextResources
+import com.SuperfumeKotlin.util.FormValidators.validateEmail
+import com.SuperfumeKotlin.util.FormValidators.validatePassword
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

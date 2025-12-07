@@ -2,7 +2,7 @@ package com.SuperfumeKotlin.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.SuperfumeKotlin.util.Constantes
+import com.SuperfumeKotlin.util.Constants
 
 /**
  * Entidad que representa un usuario en la base de datos
@@ -16,7 +16,7 @@ import com.SuperfumeKotlin.util.Constantes
  * @property address Dirección del usuario (opcional)
  * @property profileImageUri URI de la imagen de perfil (opcional)
  */
-@Entity(tableName = Constantes.TABLA_USUARIOS)
+@Entity(tableName = Constants.TABLE_USERS)
 data class Usuario(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,

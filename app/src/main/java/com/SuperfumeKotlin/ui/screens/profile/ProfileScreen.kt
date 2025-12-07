@@ -36,12 +36,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.SuperfumeKotlin.BuildConfig
 import com.SuperfumeKotlin.ui.components.ValidatedTextField
 import com.SuperfumeKotlin.ui.viewmodel.ViewModelAutenticacion
-import com.SuperfumeKotlin.util.ValidadorFormularios
+import com.SuperfumeKotlin.util.FormValidators
+import com.SuperfumeKotlin.util.ValidationResult
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -278,10 +279,32 @@ fun ProfileScreen(
                         )
 
                         if (isInEditMode) {
-                            ValidatedTextField(value = firstName, onValueChange = { firstName = it }, label = "Nombre", validation = ValidadorFormularios::validarNombre)
-                            ValidatedTextField(value = lastName, onValueChange = { lastName = it }, label = "Apellido", validation = ValidadorFormularios::validarNombre)
-                            ValidatedTextField(value = phone, onValueChange = { phone = it }, label = "Teléfono", validation = ValidadorFormularios::validarTelefono, leadingIcon = Icons.Default.Phone)
-                            ValidatedTextField(value = address, onValueChange = { address = it }, label = "Dirección", validation = ValidadorFormularios::validarDireccion, leadingIcon = Icons.Default.LocationOn)
+                            ValidatedTextField(
+                                value = firstName, 
+                                onValueChange = { firstName = it }, 
+                                label = "Nombre", 
+                                validation = FormValidators::validateName
+                            )
+                            ValidatedTextField(
+                                value = lastName, 
+                                onValueChange = { lastName = it }, 
+                                label = "Apellido", 
+                                validation = FormValidators::validateName
+                            )
+                            ValidatedTextField(
+                                value = phone, 
+                                onValueChange = { phone = it }, 
+                                label = "Teléfono", 
+                                validation = FormValidators::validatePhone, 
+                                leadingIcon = Icons.Default.Phone
+                            )
+                            ValidatedTextField(
+                                value = address, 
+                                onValueChange = { address = it }, 
+                                label = "Dirección", 
+                                validation = FormValidators::validateAddress, 
+                                leadingIcon = Icons.Default.LocationOn
+                            )
                         } else {
                             ProfileInfoItem(icon = Icons.Default.Person, label = "Nombre", value = usuarioActual?.firstName ?: "")
                             ProfileInfoItem(icon = Icons.Default.Person, label = "Apellido", value = usuarioActual?.lastName ?: "")
@@ -316,10 +339,10 @@ fun ProfileScreen(
                                     isInEditMode = false
                                 },
                                 modifier = Modifier.fillMaxWidth(),
-                                enabled = ValidadorFormularios.validarNombre(firstName).esValido &&
-                                        ValidadorFormularios.validarNombre(lastName).esValido &&
-                                        ValidadorFormularios.validarTelefono(phone).esValido &&
-                                        ValidadorFormularios.validarDireccion(address).esValido
+                                enabled = FormValidators.validateName(firstName).isValid &&
+                                        FormValidators.validateName(lastName).isValid &&
+                                        FormValidators.validatePhone(phone).isValid &&
+                                        FormValidators.validateAddress(address).isValid
                             ) {
                                 Icon(Icons.Default.Save, contentDescription = null)
                                 Spacer(modifier = Modifier.width(8.dp))
@@ -430,7 +453,7 @@ private fun createImageUri(context: Context): Uri {
     )
     return FileProvider.getUriForFile(
         context,
-        "${BuildConfig.APPLICATION_ID}.provider",
+        "com.SuperfumeKotlin.provider",
         imageFile
     )
 }

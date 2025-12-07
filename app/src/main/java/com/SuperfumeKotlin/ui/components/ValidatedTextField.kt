@@ -18,11 +18,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-data class ValidationResult(
-    val isValid: Boolean,
-    val errorMessage: String? = null
-)
+import com.SuperfumeKotlin.util.ValidationResult
 
 @Composable
 fun ValidatedTextField(
