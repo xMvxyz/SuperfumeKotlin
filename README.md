@@ -49,7 +49,6 @@ SuperfumeKotlin es una aplicación móvil Android desarrollada en Kotlin que pro
 ### UI y Navegación
 - **Material Design 3**: Diseño moderno y consistente
 - **Navigation Compose 2.7.6**: Navegación entre pantallas
-- **Coil 2.5.0**: Carga eficiente de imágenes
 - **CameraX 1.3.1**: Integración con cámara del dispositivo
 
 ### Testing
@@ -116,45 +115,7 @@ app/src/main/java/com/SuperfumeKotlin/
 
 ```
 
-## Base de Datos
 
-### Tablas
-
-#### Perfumes
-```kotlin
-- id: Long (PK, autoincrement)
-- name: String
-- brand: String
-- price: Double
-- description: String
-- imageUri: String?
-- category: String
-- size: String
-- gender: String
-- isAvailable: Boolean
-- stock: Int
-```
-
-#### Usuarios
-```kotlin
-- id: Long (PK, autoincrement)
-- email: String
-- password: String
-- firstName: String
-- lastName: String
-- phone: String?
-- address: String?
-- profileImageUri: String?
-```
-
-#### Elementos del Carrito
-```kotlin
-- id: Long (PK, autoincrement)
-- userId: Long (FK)
-- perfumeId: Long (FK)
-- quantity: Int
-- addedAt: Long
-```
 
 ## Instalación y Configuración
 
@@ -217,7 +178,6 @@ Los administradores pueden:
 - Agregar nuevos perfumes con imágenes
 - Actualizar información de productos existentes
 - Gestionar inventario y stock
-- Ver estadísticas de ventas
 
 ## Arquitectura
 
@@ -232,22 +192,8 @@ Repository (Abstracción)
     ↓
 DAO (Room)
     ↓
-Database (SQLite)
+Database (PostqreSQL)
 ```
-
-### Inyección de Dependencias
-
-Hilt proporciona:
-- Singleton de Database
-- Singleton de Repository
-- Scoped ViewModels
-- DAOs configurados automáticamente
-
-### Gestión de Estado
-
-- StateFlow para estados reactivos
-- Coroutines para operaciones asíncronas
-- Flow para streams de datos continuos
 
 ## Testing
 
@@ -283,10 +229,6 @@ Este proyecto es de código propietario.
 - Desarrollador Principal: xMvxyz
 - Repositorio: https://github.com/xMvxyz/SuperfumeKotlin
 
-## Contacto
-
-Para reportar problemas o sugerencias, crear un issue en el repositorio de GitHub.
-
 ## Próximas Características
 
 - Integración con pasarelas de pago
@@ -307,12 +249,5 @@ El proyecto está configurado con:
 - Build Config habilitado
 - ProGuard configurado para release
 
-### Consideraciones de Rendimiento
-- Lazy loading de imágenes con Coil
-- Paginación en listas largas
-- Índices optimizados en Room
-- Coroutines para operaciones pesadas
-
----
 
 Última actualización: Noviembre 2025

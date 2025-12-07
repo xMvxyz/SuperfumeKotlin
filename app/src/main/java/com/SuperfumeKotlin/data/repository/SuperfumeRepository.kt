@@ -7,6 +7,9 @@ import com.SuperfumeKotlin.data.model.ElementoCarrito
 import com.SuperfumeKotlin.data.model.Perfume
 import com.SuperfumeKotlin.data.model.Usuario
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.emitAll
+import com.superfume_movil.data.remote.RemoteDataSource
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,7 +22,8 @@ import javax.inject.Singleton
 class RepositorioSuperfume @Inject constructor(
     private val daoPerfume: DaoPerfume,
     private val daoUsuario: DaoUsuario,
-    private val daoCarrito: DaoCarrito
+    private val daoCarrito: DaoCarrito,
+    private val remoteDataSource: RemoteDataSource? = null
 ) {
     
     // ========== OPERACIONES DE PERFUMES ==========
@@ -28,8 +32,20 @@ class RepositorioSuperfume @Inject constructor(
      * Obtiene todos los perfumes disponibles
      * @return Flow con la lista de perfumes disponibles
      */
-    fun obtenerTodosLosPerfumesDisponibles(): Flow<List<Perfume>> = 
-        daoPerfume.obtenerTodosLosPerfumesDisponibles()
+    fun obtenerTodosLosPerfumesDisponibles(): Flow<List<Perfume>> = flow {
+        // Emite primero los datos locales desde Room
+        emitAll(daoPerfume.obtenerTodosLosPerfumesDisponibles())
+
+        // Intenta refrescar desde el backend y guardar en la BD local
+        try {
+            val remotos = remoteDataSource?.obtenerPerfumes() ?: emptyList()
+            if (remotos.isNotEmpty()) {
+                remotos.forEach { daoPerfume.insertarPerfume(it) }
+            }
+        } catch (_: Exception) {
+            // Ignorar errores de red; mantenemos datos locales
+        }
+    }
     
     /**
      * Obtiene un perfume por su ID
