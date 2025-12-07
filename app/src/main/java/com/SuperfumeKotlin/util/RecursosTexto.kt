@@ -1,4 +1,4 @@
-package com.superfume_movil.util
+package com.SuperfumeKotlin.util
 
 /**
  * Recursos de texto en español para la aplicación Superfume

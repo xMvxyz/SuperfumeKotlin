@@ -1,13 +1,13 @@
-package com.superfume_movil.di
+package com.SuperfumeKotlin.di
 
 import android.content.Context
 import androidx.room.Room
-import com.superfume_movil.data.dao.DaoCarrito
-import com.superfume_movil.data.dao.DaoPerfume
-import com.superfume_movil.data.dao.DaoUsuario
-import com.superfume_movil.data.database.BaseDatosSuperfume
-import com.superfume_movil.data.repository.RepositorioSuperfume
-import com.superfume_movil.util.Constantes
+import com.SuperfumeKotlin.data.dao.DaoCarrito
+import com.SuperfumeKotlin.data.dao.DaoPerfume
+import com.SuperfumeKotlin.data.dao.DaoUsuario
+import com.SuperfumeKotlin.data.database.BaseDatosSuperfume
+import com.SuperfumeKotlin.data.repository.RepositorioSuperfume
+import com.SuperfumeKotlin.util.Constantes
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

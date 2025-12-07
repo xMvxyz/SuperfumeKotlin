@@ -1,4 +1,4 @@
-package com.superfume_movil.ui.components
+package com.SuperfumeKotlin.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween

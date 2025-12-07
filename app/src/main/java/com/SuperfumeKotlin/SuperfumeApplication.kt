@@ -1,7 +1,7 @@
-package com.superfume_movil
+package com.SuperfumeKotlin
 
 import android.app.Application
-import com.superfume_movil.data.InicializadorDatos
+import com.SuperfumeKotlin.data.InicializadorDatos
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 

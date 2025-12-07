@@ -1,4 +1,4 @@
-package com.superfume_movil.ui.components
+package com.SuperfumeKotlin.ui.components
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult

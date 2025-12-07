@@ -1,19 +1,19 @@
-package com.superfume_movil.ui.navigation
+package com.SuperfumeKotlin.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.superfume_movil.ui.screens.admin.AddPerfumeScreen
-import com.superfume_movil.ui.screens.auth.LoginScreen
-import com.superfume_movil.ui.screens.auth.RegisterScreen
-import com.superfume_movil.ui.screens.cart.CartScreen
-import com.superfume_movil.ui.screens.home.HomeScreen
-import com.superfume_movil.ui.screens.perfume.PerfumeDetailScreen
-import com.superfume_movil.ui.screens.profile.ProfileScreen
-import com.superfume_movil.ui.viewmodel.ViewModelAutenticacion
-import com.superfume_movil.util.Constantes
+import com.SuperfumeKotlin.ui.screens.admin.AddPerfumeScreen
+import com.SuperfumeKotlin.ui.screens.auth.LoginScreen
+import com.SuperfumeKotlin.ui.screens.auth.RegisterScreen
+import com.SuperfumeKotlin.ui.screens.cart.CartScreen
+import com.SuperfumeKotlin.ui.screens.home.HomeScreen
+import com.SuperfumeKotlin.ui.screens.perfume.PerfumeDetailScreen
+import com.SuperfumeKotlin.ui.screens.profile.ProfileScreen
+import com.SuperfumeKotlin.ui.viewmodel.ViewModelAutenticacion
+import com.SuperfumeKotlin.util.Constantes
 
 /**
  * Navegación principal de la aplicación Superfume

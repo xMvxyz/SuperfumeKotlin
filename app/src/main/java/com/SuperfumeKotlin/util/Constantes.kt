@@ -1,4 +1,4 @@
-package com.superfume_movil.util
+package com.SuperfumeKotlin.util
 
 /**
  * Constantes de la aplicación Superfume

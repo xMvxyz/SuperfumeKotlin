@@ -1,8 +1,8 @@
-package com.superfume_movil.data.dao
+package com.SuperfumeKotlin.data.dao
 
 import androidx.room.*
-import com.superfume_movil.data.model.Perfume
-import com.superfume_movil.util.Constantes
+import com.SuperfumeKotlin.data.model.Perfume
+import com.SuperfumeKotlin.util.Constantes
 import kotlinx.coroutines.flow.Flow
 
 /**

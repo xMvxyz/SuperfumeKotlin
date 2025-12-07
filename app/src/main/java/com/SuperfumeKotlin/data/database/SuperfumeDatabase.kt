@@ -1,16 +1,16 @@
-package com.superfume_movil.data.database
+package com.SuperfumeKotlin.data.database
 
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import android.content.Context
-import com.superfume_movil.data.dao.DaoCarrito
-import com.superfume_movil.data.dao.DaoPerfume
-import com.superfume_movil.data.dao.DaoUsuario
-import com.superfume_movil.data.model.ElementoCarrito
-import com.superfume_movil.data.model.Perfume
-import com.superfume_movil.data.model.Usuario
-import com.superfume_movil.util.Constantes
+import com.SuperfumeKotlin.data.dao.DaoCarrito
+import com.SuperfumeKotlin.data.dao.DaoPerfume
+import com.SuperfumeKotlin.data.dao.DaoUsuario
+import com.SuperfumeKotlin.data.model.ElementoCarrito
+import com.SuperfumeKotlin.data.model.Perfume
+import com.SuperfumeKotlin.data.model.Usuario
+import com.SuperfumeKotlin.util.Constantes
 
 /**
  * Base de datos principal de la aplicación Superfume

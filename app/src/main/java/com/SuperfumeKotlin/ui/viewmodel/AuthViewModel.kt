@@ -1,14 +1,14 @@
-package com.superfume_movil.ui.viewmodel
+package com.SuperfumeKotlin.ui.viewmodel
 
 import android.content.Context
 import android.net.Uri
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.superfume_movil.data.model.Usuario
-import com.superfume_movil.data.repository.RepositorioSuperfume
-import com.superfume_movil.util.RecursosTexto
-import com.superfume_movil.util.ValidadorFormularios
+import com.SuperfumeKotlin.data.model.Usuario
+import com.SuperfumeKotlin.data.repository.RepositorioSuperfume
+import com.SuperfumeKotlin.util.RecursosTexto
+import com.SuperfumeKotlin.util.ValidadorFormularios
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

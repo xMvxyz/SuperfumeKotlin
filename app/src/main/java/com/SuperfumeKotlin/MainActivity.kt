@@ -1,4 +1,4 @@
-package com.superfume_movil
+package com.SuperfumeKotlin
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,8 +10,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.superfume_movil.ui.navigation.NavegacionSuperfume
-import com.superfume_movil.ui.theme.Superfume_movilTheme
+import com.SuperfumeKotlin.ui.navigation.NavegacionSuperfume
+import com.SuperfumeKotlin.ui.theme.SuperfumeKotlinTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Superfume_movilTheme {
+            SuperfumeKotlinTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     AplicacionSuperfume(
                         modifier = Modifier.padding(innerPadding)

@@ -1,4 +1,4 @@
-package com.superfume_movil.ui.screens.home
+package com.SuperfumeKotlin.ui.screens.home
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.runtime.collectAsState
 import coil.compose.AsyncImage
-import com.superfume_movil.data.model.Perfume
-import com.superfume_movil.ui.viewmodel.ViewModelPerfume
+import com.SuperfumeKotlin.data.model.Perfume
+import com.SuperfumeKotlin.ui.viewmodel.ViewModelPerfume
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

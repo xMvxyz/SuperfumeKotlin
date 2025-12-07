@@ -1,4 +1,4 @@
-package com.superfume_movil.ui.screens.auth
+package com.SuperfumeKotlin.ui.screens.auth
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -28,11 +28,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
-import com.superfume_movil.ui.viewmodel.ViewModelAutenticacion
-import com.superfume_movil.ui.components.CampoTextoValidado
-import com.superfume_movil.util.RecursosTexto
-import com.superfume_movil.util.ValidadorFormularios.validarEmail
-import com.superfume_movil.util.ValidadorFormularios.validarContraseña
+import com.SuperfumeKotlin.ui.viewmodel.ViewModelAutenticacion
+import com.SuperfumeKotlin.ui.components.CampoTextoValidado
+import com.SuperfumeKotlin.util.RecursosTexto
+import com.SuperfumeKotlin.util.ValidadorFormularios.validarEmail
+import com.SuperfumeKotlin.util.ValidadorFormularios.validarContraseña
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

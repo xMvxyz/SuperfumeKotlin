@@ -1,4 +1,4 @@
-package com.superfume_movil.ui.theme
+package com.SuperfumeKotlin.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -34,7 +34,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun Superfume_movilTheme(
+fun SuperfumeKotlinTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,

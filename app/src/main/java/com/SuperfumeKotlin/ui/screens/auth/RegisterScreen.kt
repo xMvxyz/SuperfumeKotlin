@@ -1,4 +1,4 @@
-package com.superfume_movil.ui.screens.auth
+package com.SuperfumeKotlin.ui.screens.auth
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -29,8 +29,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
-import com.superfume_movil.data.model.Usuario
-import com.superfume_movil.ui.viewmodel.ViewModelAutenticacion
+import com.SuperfumeKotlin.data.model.Usuario
+import com.SuperfumeKotlin.ui.viewmodel.ViewModelAutenticacion
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,7 +1,7 @@
-package com.superfume_movil.util
+package com.SuperfumeKotlin.util
 
 import android.util.Patterns
-import com.superfume_movil.util.RecursosTexto
+import com.SuperfumeKotlin.util.RecursosTexto
 
 /**
  * Clase de utilidad para validaciones de formularios

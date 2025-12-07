@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.superfumekotlin"
+    namespace = "com.SuperfumeKotlin"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.superfumekotlin"
+        applicationId = "com.SuperfumeKotlin"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -32,8 +32,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
     }
     
     composeOptions {
@@ -48,13 +50,6 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-}
-
-// Configuración global para forzar JVM target
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "11"
     }
 }
 

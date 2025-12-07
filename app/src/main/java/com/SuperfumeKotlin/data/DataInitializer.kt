@@ -1,8 +1,8 @@
-package com.superfume_movil.data
+package com.SuperfumeKotlin.data
 
-import com.superfume_movil.data.model.Perfume
-import com.superfume_movil.data.model.Usuario
-import com.superfume_movil.data.repository.RepositorioSuperfume
+import com.SuperfumeKotlin.data.model.Perfume
+import com.SuperfumeKotlin.data.model.Usuario
+import com.SuperfumeKotlin.data.repository.RepositorioSuperfume
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

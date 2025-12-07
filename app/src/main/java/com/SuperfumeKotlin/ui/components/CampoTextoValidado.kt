@@ -1,4 +1,4 @@
-package com.superfume_movil.ui.components
+package com.SuperfumeKotlin.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -19,9 +19,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.superfume_movil.util.RecursosTexto
-import com.superfume_movil.util.ValidadorFormularios
-import com.superfume_movil.util.ResultadoValidacion
+import com.SuperfumeKotlin.util.RecursosTexto
+import com.SuperfumeKotlin.util.ValidadorFormularios
+import com.SuperfumeKotlin.util.ResultadoValidacion
 
 /**
  * Campo de texto con validación integrada

@@ -1,4 +1,4 @@
-package com.superfume_movil
+package com.SuperfumeKotlin
 
 import org.junit.Test
 

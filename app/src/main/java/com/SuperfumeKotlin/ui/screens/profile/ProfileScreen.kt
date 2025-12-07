@@ -1,4 +1,4 @@
-package com.superfume_movil.ui.screens.profile
+package com.SuperfumeKotlin.ui.screens.profile
 
 import android.Manifest
 import android.content.Context
@@ -38,8 +38,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
 import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
-import com.superfume_movil.BuildConfig
-import com.superfume_movil.ui.viewmodel.ViewModelAutenticacion
+import com.SuperfumeKotlin.BuildConfig
+import com.SuperfumeKotlin.ui.viewmodel.ViewModelAutenticacion
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)

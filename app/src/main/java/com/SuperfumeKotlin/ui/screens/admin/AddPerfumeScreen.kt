@@ -1,4 +1,4 @@
-package com.superfume_movil.ui.screens.admin
+package com.SuperfumeKotlin.ui.screens.admin
 
 import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
@@ -24,13 +24,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.runtime.collectAsState
-import com.superfume_movil.data.model.Perfume
-import com.superfume_movil.ui.components.ImagePicker
-import com.superfume_movil.ui.components.ValidatedTextField
-import com.superfume_movil.ui.components.validateName
-import com.superfume_movil.ui.components.validatePrice
-import com.superfume_movil.ui.components.validateStock
-import com.superfume_movil.ui.viewmodel.ViewModelPerfume
+import com.SuperfumeKotlin.data.model.Perfume
+import com.SuperfumeKotlin.ui.components.ImagePicker
+import com.SuperfumeKotlin.ui.components.ValidatedTextField
+import com.SuperfumeKotlin.ui.components.validateName
+import com.SuperfumeKotlin.ui.components.validatePrice
+import com.SuperfumeKotlin.ui.components.validateStock
+import com.SuperfumeKotlin.ui.viewmodel.ViewModelPerfume
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

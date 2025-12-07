@@ -1,10 +1,10 @@
-package com.superfume_movil.ui.viewmodel
+package com.SuperfumeKotlin.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.superfume_movil.data.model.ElementoCarrito
-import com.superfume_movil.data.model.Perfume
-import com.superfume_movil.data.repository.RepositorioSuperfume
+import com.SuperfumeKotlin.data.model.ElementoCarrito
+import com.SuperfumeKotlin.data.model.Perfume
+import com.SuperfumeKotlin.data.repository.RepositorioSuperfume
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

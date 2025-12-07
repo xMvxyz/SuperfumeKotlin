@@ -1,8 +1,8 @@
-package com.superfume_movil.data.model
+package com.SuperfumeKotlin.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.superfume_movil.util.Constantes
+import com.SuperfumeKotlin.util.Constantes
 
 /**
  * Entidad que representa un usuario en la base de datos

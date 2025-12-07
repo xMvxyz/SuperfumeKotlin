@@ -1,4 +1,4 @@
-package com.superfume_movil.ui.theme
+package com.SuperfumeKotlin.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
