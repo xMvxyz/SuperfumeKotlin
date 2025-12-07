@@ -50,6 +50,13 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     
+    // Limpiar error cuando el usuario cambia los campos
+    LaunchedEffect(email, password) {
+        if (mensajeError != null) {
+            viewModel.limpiarError()
+        }
+    }
+    
     LaunchedEffect(estaLogueado) {
         if (estaLogueado) {
             onNavigateToHome()

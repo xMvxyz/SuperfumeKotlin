@@ -20,5 +20,5 @@ data class ElementoCarrito(
     val userId: Long,
     val perfumeId: Long,
     val quantity: Int,
-    val addedAt: Long = System.currentTimeMillis()
+    val addedAt: Long
 )

@@ -35,7 +35,7 @@ object ModuloBaseDatos {
             context.applicationContext,
             BaseDatosSuperfume::class.java,
             Constants.DATABASE_NAME
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
     
     /**

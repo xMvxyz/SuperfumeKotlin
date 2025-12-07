@@ -98,7 +98,8 @@ class ViewModelCarrito @Inject constructor(
                     val nuevoElemento = ElementoCarrito(
                         userId = idUsuario,
                         perfumeId = idPerfume,
-                        quantity = cantidad
+                        quantity = cantidad,
+                        addedAt = System.currentTimeMillis()
                     )
                     repositorio.agregarAlCarrito(nuevoElemento)
                 }

@@ -81,6 +81,9 @@ class ViewModelAutenticacion @Inject constructor(
      * @param contraseña Contraseña del usuario
      */
     fun iniciarSesion(email: String, contraseña: String) {
+        // Limpiar mensaje de error anterior
+        _mensajeError.value = null
+        
         val validacionEmail = FormValidators.validateEmail(email)
         if (!validacionEmail.isValid) {
             _mensajeError.value = validacionEmail.errorMessage
@@ -95,8 +98,9 @@ class ViewModelAutenticacion @Inject constructor(
         
         viewModelScope.launch {
             _estaCargando.value = true
+            _mensajeError.value = null
             try {
-                val usuario = repositorio.autenticarUsuario(email, contraseña)
+                val usuario = repositorio.autenticarUsuario(email.trim(), contraseña)
                 if (usuario != null) {
                     _usuarioActual.value = usuario
                     _estaLogueado.value = true
@@ -105,7 +109,8 @@ class ViewModelAutenticacion @Inject constructor(
                     _mensajeError.value = TextResources.ERROR_INVALID_CREDENTIALS
                 }
             } catch (e: Exception) {
-                _mensajeError.value = "Error al iniciar sesión: ${e.message}"
+                e.printStackTrace()
+                _mensajeError.value = "Error al iniciar sesión: ${e.message ?: "Error desconocido"}"
             } finally {
                 _estaCargando.value = false
             }
@@ -117,6 +122,9 @@ class ViewModelAutenticacion @Inject constructor(
      * @param usuario Usuario a registrar
      */
     fun registrarUsuario(usuario: Usuario) {
+        // Limpiar mensaje de error anterior
+        _mensajeError.value = null
+        
         val validacionEmail = FormValidators.validateEmail(usuario.email)
         if (!validacionEmail.isValid) {
             _mensajeError.value = validacionEmail.errorMessage
@@ -143,18 +151,20 @@ class ViewModelAutenticacion @Inject constructor(
         
         viewModelScope.launch {
             _estaCargando.value = true
+            _mensajeError.value = null
             try {
-                val usuarioExistente = repositorio.obtenerUsuarioPorEmail(usuario.email)
+                val usuarioExistente = repositorio.obtenerUsuarioPorEmail(usuario.email.trim())
                 if (usuarioExistente != null) {
                     _mensajeError.value = TextResources.ERROR_EMAIL_ALREADY_REGISTERED
                 } else {
-                    val idUsuario = repositorio.insertarUsuario(usuario)
-                    _usuarioActual.value = usuario.copy(id = idUsuario)
+                    val idUsuario = repositorio.insertarUsuario(usuario.copy(email = usuario.email.trim()))
+                    _usuarioActual.value = usuario.copy(id = idUsuario, email = usuario.email.trim())
                     _estaLogueado.value = true
                     _mensajeError.value = null
                 }
             } catch (e: Exception) {
-                _mensajeError.value = "Error al registrar usuario: ${e.message}"
+                e.printStackTrace()
+                _mensajeError.value = "Error al registrar usuario: ${e.message ?: "Error desconocido"}"
             } finally {
                 _estaCargando.value = false
             }
