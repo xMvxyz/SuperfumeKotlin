@@ -25,7 +25,7 @@ data class Perfume(
     val id: Long = 0,
     val name: String,
     val brand: String,
-    val price: Double,
+    val price: Int,
     val description: String,
     val imageUri: String? = null,
     val category: String,

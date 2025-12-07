@@ -293,9 +293,11 @@ fun PerfumeDetailScreen(
                             // Add to Cart Button
                             Button(
                                 onClick = {
-                                    if (usuarioActual != null && perfume.stock > 0) {
-                                        cartViewModel.agregarAlCarrito(usuarioActual?.id ?: 0, perfume.id, quantity)
-                                        showAddedToCart = true
+                                    usuarioActual?.let { usuario ->
+                                        if (perfume.stock > 0) {
+                                            cartViewModel.agregarAlCarrito(usuario.id, perfume.id, quantity)
+                                            showAddedToCart = true
+                                        }
                                     }
                                 },
                                 modifier = Modifier

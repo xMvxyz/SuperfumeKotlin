@@ -295,7 +295,7 @@ fun AddPerfumeScreen(
                                     val newPerfume = Perfume(
                                         name = name,
                                         brand = brand,
-                                        price = price.toDoubleOrNull() ?: 0.0,
+                                        price = price.toIntOrNull() ?: 0,
                                         description = description,
                                         category = category,
                                         size = size,

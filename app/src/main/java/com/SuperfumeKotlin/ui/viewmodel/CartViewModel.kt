@@ -28,8 +28,8 @@ class ViewModelCarrito @Inject constructor(
     private val _perfumesCarrito = MutableStateFlow<List<Perfume>>(emptyList())
     val perfumesCarrito: StateFlow<List<Perfume>> = _perfumesCarrito.asStateFlow()
     
-    private val _precioTotal = MutableStateFlow(0.0)
-    val precioTotal: StateFlow<Double> = _precioTotal.asStateFlow()
+    private val _precioTotal = MutableStateFlow(0)
+    val precioTotal: StateFlow<Int> = _precioTotal.asStateFlow()
     
     private val _totalElementos = MutableStateFlow(0)
     val totalElementos: StateFlow<Int> = _totalElementos.asStateFlow()
@@ -63,7 +63,7 @@ class ViewModelCarrito @Inject constructor(
                     _perfumesCarrito.value = perfumes
                     
                     // Calcular precio total
-                    var total = 0.0
+                    var total = 0
                     for (elemento in elementos) {
                         val perfume = perfumes.find { it.id == elemento.perfumeId }
                         if (perfume != null) {

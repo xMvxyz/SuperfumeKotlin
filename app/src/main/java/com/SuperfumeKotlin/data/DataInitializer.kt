@@ -28,7 +28,7 @@ class InicializadorDatos @Inject constructor(
                 Perfume(
                     name = "Chanel No. 5",
                     brand = "Chanel",
-                    price = 120.00,
+                    price = 120000,
                     description = "Un clásico atemporal con notas florales y aldehídicas. Una fragancia elegante y sofisticada que ha sido amada por generaciones.",
                     category = "Florales",
                     size = "100ml",
@@ -38,7 +38,7 @@ class InicializadorDatos @Inject constructor(
                 Perfume(
                     name = "Dior Sauvage",
                     brand = "Dior",
-                    price = 95.00,
+                    price = 95000,
                     description = "Una fragancia fresca y moderna con notas de bergamota y pimienta negra. Perfecta para el hombre contemporáneo.",
                     category = "Frescos",
                     size = "100ml",
@@ -48,7 +48,7 @@ class InicializadorDatos @Inject constructor(
                 Perfume(
                     name = "Tom Ford Black Orchid",
                     brand = "Tom Ford",
-                    price = 180.00,
+                    price = 180000,
                     description = "Una fragancia misteriosa y seductora con notas de orquídea negra, chocolate y pachulí. Para ocasiones especiales.",
                     category = "Orientales",
                     size = "50ml",
@@ -58,7 +58,7 @@ class InicializadorDatos @Inject constructor(
                 Perfume(
                     name = "Versace Eros",
                     brand = "Versace",
-                    price = 75.00,
+                    price = 75000,
                     description = "Una fragancia intensa y apasionada con notas de menta, manzana verde y vainilla. Para el hombre audaz.",
                     category = "Amaderados",
                     size = "100ml",
@@ -68,7 +68,7 @@ class InicializadorDatos @Inject constructor(
                 Perfume(
                     name = "Marc Jacobs Daisy",
                     brand = "Marc Jacobs",
-                    price = 85.00,
+                    price = 85000,
                     description = "Una fragancia juvenil y alegre con notas de violeta, gardenia y almizcle blanco. Perfecta para el día a día.",
                     category = "Florales",
                     size = "75ml",
@@ -78,7 +78,7 @@ class InicializadorDatos @Inject constructor(
                 Perfume(
                     name = "Acqua di Gio",
                     brand = "Giorgio Armani",
-                    price = 90.00,
+                    price = 90000,
                     description = "Una fragancia acuática y fresca inspirada en el mar Mediterráneo. Ideal para el verano.",
                     category = "Cítricos",
                     size = "100ml",
@@ -88,7 +88,7 @@ class InicializadorDatos @Inject constructor(
                 Perfume(
                     name = "Yves Saint Laurent Libre",
                     brand = "YSL",
-                    price = 110.00,
+                    price = 110000,
                     description = "Una fragancia libre y audaz con notas de lavanda, naranja amarga y vainilla. Para la mujer independiente.",
                     category = "Florales",
                     size = "90ml",
@@ -98,7 +98,7 @@ class InicializadorDatos @Inject constructor(
                 Perfume(
                     name = "Hermès Terre d'Hermès",
                     brand = "Hermès",
-                    price = 140.00,
+                    price = 140000,
                     description = "Una fragancia terrosa y sofisticada con notas de naranja, pimienta y cedro. Para el hombre refinado.",
                     category = "Amaderados",
                     size = "100ml",
@@ -108,7 +108,7 @@ class InicializadorDatos @Inject constructor(
                 Perfume(
                     name = "Jo Malone Lime Basil & Mandarin",
                     brand = "Jo Malone",
-                    price = 65.00,
+                    price = 65000,
                     description = "Una fragancia cítrica y herbácea con notas de lima, albahaca y mandarina. Fresca y energizante.",
                     category = "Cítricos",
                     size = "30ml",
@@ -118,7 +118,7 @@ class InicializadorDatos @Inject constructor(
                 Perfume(
                     name = "Lancôme La Vie Est Belle",
                     brand = "Lancôme",
-                    price = 105.00,
+                    price = 105000,
                     description = "Una fragancia dulce y femenina con notas de iris, vainilla y praliné. Para celebrar la vida.",
                     category = "Orientales",
                     size = "75ml",

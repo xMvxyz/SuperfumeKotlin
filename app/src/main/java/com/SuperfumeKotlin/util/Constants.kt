@@ -19,7 +19,7 @@ object Constants {
     const val MAX_PASSWORD_LENGTH = 20
     const val MIN_NAME_LENGTH = 2
     const val MAX_NAME_LENGTH = 50
-    const val MAX_PRICE = 10000.0
+    const val MAX_PRICE = 10000
     const val MAX_STOCK = 1000
     
     // Categorías de perfumes

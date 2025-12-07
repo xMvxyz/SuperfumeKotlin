@@ -134,15 +134,15 @@ object FormValidators {
                 isValid = false,
                 errorMessage = TextResources.ERROR_INVALID_PRICE
             )
-            price.toDoubleOrNull() == null -> ValidationResult(
+            price.toIntOrNull() == null -> ValidationResult(
                 isValid = false,
                 errorMessage = TextResources.ERROR_INVALID_PRICE
             )
-            price.toDouble() <= 0 -> ValidationResult(
+            price.toInt() <= 0 -> ValidationResult(
                 isValid = false,
                 errorMessage = TextResources.ERROR_PRICE_ZERO
             )
-            price.toDouble() > Constants.MAX_PRICE -> ValidationResult(
+            price.toInt() > Constants.MAX_PRICE -> ValidationResult(
                 isValid = false,
                 errorMessage = TextResources.ERROR_MAX_PRICE
             )
