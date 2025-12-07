@@ -57,6 +57,7 @@ object Constantes {
     const val RUTA_CARRITO = "cart"
     const val RUTA_PERFIL = "profile"
     const val RUTA_AGREGAR_PERFUME = "add_perfume"
+    const val RUTA_EDITAR_PERFIL = "edit_profile"
     
     // Colores del tema
     const val COLOR_PRIMARIO = 0xFF6B73FF

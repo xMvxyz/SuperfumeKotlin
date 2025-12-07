@@ -89,6 +89,7 @@ fun NavegacionSuperfume(navController: NavHostController) {
         
         composable(Constantes.RUTA_CARRITO) {
             CartScreen(
+                authViewModel = authViewModel,
                 onNavigateBack = {
                     navController.popBackStack()
                 },

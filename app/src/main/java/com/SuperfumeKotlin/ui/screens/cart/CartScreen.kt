@@ -37,7 +37,7 @@ fun CartScreen(
     onNavigateBack: () -> Unit,
     onNavigateToHome: () -> Unit,
     cartViewModel: ViewModelCarrito = hiltViewModel(),
-    authViewModel: ViewModelAutenticacion = hiltViewModel()
+    authViewModel: ViewModelAutenticacion
 ) {
     val usuarioActual by authViewModel.usuarioActual.collectAsState()
     val elementosCarrito by cartViewModel.elementosCarrito.collectAsState()

@@ -1,6 +1,6 @@
-package com.superfume_movil.di
+package com.SuperfumeKotlin.di
 
-import com.superfume_movil.data.remote.ApiService
+import com.SuperfumeKotlin.data.remote.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

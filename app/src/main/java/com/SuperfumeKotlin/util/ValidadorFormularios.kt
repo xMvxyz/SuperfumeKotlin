@@ -97,7 +97,8 @@ object ValidadorFormularios {
      */
     fun validarTelefono(telefono: String): ResultadoValidacion {
         return when {
-            telefono.isEmpty() -> ResultadoValidacion(esValido = true) // Teléfono es opcional
+            telefono.isEmpty() -> ResultadoValidacion(esValido = false, mensajeError = "El teléfono es obligatorio")
+            !telefono.all { it.isDigit() } -> ResultadoValidacion(esValido = false, mensajeError = "El teléfono solo puede contener números")
             telefono.length < 8 -> ResultadoValidacion(
                 esValido = false,
                 mensajeError = "El teléfono debe tener al menos 8 dígitos"
@@ -106,10 +107,19 @@ object ValidadorFormularios {
                 esValido = false,
                 mensajeError = "El teléfono no puede tener más de 15 dígitos"
             )
-            !telefono.all { it.isDigit() || it == '+' || it == '-' || it == ' ' } -> ResultadoValidacion(
-                esValido = false,
-                mensajeError = "Formato de teléfono inválido"
-            )
+            else -> ResultadoValidacion(esValido = true)
+        }
+    }
+
+    /**
+     * Valida una dirección
+     * @param direccion Dirección a validar
+     * @return Resultado de la validación
+     */
+    fun validarDireccion(direccion: String): ResultadoValidacion {
+        return when {
+            direccion.isEmpty() -> ResultadoValidacion(esValido = false, mensajeError = "La dirección es obligatoria")
+            direccion.length < 5 -> ResultadoValidacion(esValido = false, mensajeError = "La dirección debe tener al menos 5 caracteres")
             else -> ResultadoValidacion(esValido = true)
         }
     }

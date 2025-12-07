@@ -29,17 +29,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.collectAsState
-import androidx.core.content.FileProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.SuperfumeKotlin.BuildConfig
+import com.SuperfumeKotlin.ui.components.ValidatedTextField
 import com.SuperfumeKotlin.ui.viewmodel.ViewModelAutenticacion
+import com.SuperfumeKotlin.util.ValidadorFormularios
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,9 +49,25 @@ import java.io.File
 fun ProfileScreen(
     onNavigateBack: () -> Unit,
     onNavigateToLogin: () -> Unit,
-    authViewModel: ViewModelAutenticacion
+    authViewModel: ViewModelAutenticacion = hiltViewModel()
 ) {
     val usuarioActual by authViewModel.usuarioActual.collectAsState()
+
+    var isInEditMode by remember { mutableStateOf(false) }
+
+    var firstName by remember { mutableStateOf("") }
+    var lastName by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
+
+    LaunchedEffect(usuarioActual) {
+        usuarioActual?.let {
+            firstName = it.firstName
+            lastName = it.lastName
+            phone = it.phone ?: ""
+            address = it.address ?: ""
+        }
+    }
 
     var showLogoutDialog by remember { mutableStateOf(false) }
     var imageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
@@ -91,7 +109,7 @@ fun ProfileScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Mi Perfil",
+                        text = if (isInEditMode) "Editar Perfil" else "Mi Perfil",
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
@@ -100,7 +118,13 @@ fun ProfileScreen(
                     containerColor = Color(0xFF6B73FF)
                 ),
                 navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
+                    IconButton(onClick = {
+                        if (isInEditMode) {
+                            isInEditMode = false
+                        } else {
+                            onNavigateBack()
+                        }
+                    }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Volver",
@@ -159,54 +183,47 @@ fun ProfileScreen(
                     .background(Color(0xFFF8F9FA))
             ) {
                 // Profile Header
-                AnimatedVisibility(
-                    visible = true,
-                    enter = fadeIn() + slideInVertically(
-                        initialOffsetY = { -it },
-                        animationSpec = tween(800)
-                    )
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    shape = RoundedCornerShape(16.dp)
                 ) {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                        shape = RoundedCornerShape(16.dp)
+                    Column(
+                        modifier = Modifier.padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Column(
-                            modifier = Modifier.padding(24.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        Box(
+                            modifier = Modifier
+                                .size(120.dp)
+                                .clip(CircleShape)
+                                .background(Color(0xFFE0E0E0))
+                                .clickable { /* Handle click if necessary */ },
+                            contentAlignment = Alignment.Center
                         ) {
-                            // Profile Picture
-                            Box(
-                                modifier = Modifier
-                                    .size(120.dp)
-                                    .clip(CircleShape)
-                                    .background(Color(0xFFE0E0E0))
-                                    .clickable { /* Handle click if necessary */ },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                val profileImage = imageUri ?: usuarioActual?.profileImageUri
-                                if (profileImage != null) {
-                                    AsyncImage(
-                                        model = profileImage,
-                                        contentDescription = "Foto de perfil",
-                                        modifier = Modifier.fillMaxSize(),
-                                        contentScale = ContentScale.Crop
-                                    )
-                                } else {
-                                    Icon(
-                                        Icons.Default.Person,
-                                        contentDescription = null,
-                                        modifier = Modifier.size(60.dp),
-                                        tint = Color.Gray
-                                    )
-                                }
+                            val profileImage = imageUri ?: usuarioActual?.profileImageUri
+                            if (profileImage != null) {
+                                AsyncImage(
+                                    model = profileImage,
+                                    contentDescription = "Foto de perfil",
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentScale = ContentScale.Crop
+                                )
+                            } else {
+                                Icon(
+                                    Icons.Default.Person,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(60.dp),
+                                    tint = Color.Gray
+                                )
                             }
+                        }
 
-                            Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
 
+                        if (!isInEditMode) {
                             Row(
                                 horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically
@@ -219,162 +236,125 @@ fun ProfileScreen(
                                     Icon(Icons.Outlined.PhotoCamera, contentDescription = "Cámara")
                                 }
                             }
-
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            Text(
-                                text = "${usuarioActual?.firstName ?: ""} ${usuarioActual?.lastName ?: ""}",
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFF2C3E50),
-                                textAlign = TextAlign.Center
-                            )
-
-                            Text(
-                                text = usuarioActual?.email ?: "",
-                                fontSize = 16.sp,
-                                color = Color.Gray,
-                                textAlign = TextAlign.Center
-                            )
                         }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Text(
+                            text = "${usuarioActual?.firstName ?: ""} ${usuarioActual?.lastName ?: ""}",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF2C3E50),
+                            textAlign = TextAlign.Center
+                        )
+
+                        Text(
+                            text = usuarioActual?.email ?: "",
+                            fontSize = 16.sp,
+                            color = Color.Gray,
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
 
                 // Profile Information
-                AnimatedVisibility(
-                    visible = true,
-                    enter = fadeIn() + slideInVertically(
-                        initialOffsetY = { it },
-                        animationSpec = tween(800, delayMillis = 200)
-                    )
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                    shape = RoundedCornerShape(12.dp)
                 ) {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                        shape = RoundedCornerShape(12.dp)
+                    Column(
+                        modifier = Modifier.padding(20.dp)
                     ) {
-                        Column(
-                            modifier = Modifier.padding(20.dp)
-                        ) {
-                            Text(
-                                text = "Información Personal",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFF2C3E50),
-                                modifier = Modifier.padding(bottom = 16.dp)
-                            )
+                        Text(
+                            text = "Información Personal",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF2C3E50),
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
 
-                            ProfileInfoItem(
-                                icon = Icons.Default.Person,
-                                label = "Nombre",
-                                value = usuarioActual?.firstName ?: ""
-                            )
-
-                            ProfileInfoItem(
-                                icon = Icons.Default.Person,
-                                label = "Apellido",
-                                value = usuarioActual?.lastName ?: ""
-                            )
-
-                            ProfileInfoItem(
-                                icon = Icons.Default.Email,
-                                label = "Email",
-                                value = usuarioActual?.email ?: ""
-                            )
-
+                        if (isInEditMode) {
+                            ValidatedTextField(value = firstName, onValueChange = { firstName = it }, label = "Nombre", validation = ValidadorFormularios::validarNombre)
+                            ValidatedTextField(value = lastName, onValueChange = { lastName = it }, label = "Apellido", validation = ValidadorFormularios::validarNombre)
+                            ValidatedTextField(value = phone, onValueChange = { phone = it }, label = "Teléfono", validation = ValidadorFormularios::validarTelefono, leadingIcon = Icons.Default.Phone)
+                            ValidatedTextField(value = address, onValueChange = { address = it }, label = "Dirección", validation = ValidadorFormularios::validarDireccion, leadingIcon = Icons.Default.LocationOn)
+                        } else {
+                            ProfileInfoItem(icon = Icons.Default.Person, label = "Nombre", value = usuarioActual?.firstName ?: "")
+                            ProfileInfoItem(icon = Icons.Default.Person, label = "Apellido", value = usuarioActual?.lastName ?: "")
+                            ProfileInfoItem(icon = Icons.Default.Email, label = "Email", value = usuarioActual?.email ?: "")
                             if ((usuarioActual?.phone ?: "").isNotBlank()) {
-                                ProfileInfoItem(
-                                    icon = Icons.Default.Phone,
-                                    label = "Teléfono",
-                                    value = usuarioActual?.phone ?: "No especificado"
-                                )
+                                ProfileInfoItem(icon = Icons.Default.Phone, label = "Teléfono", value = usuarioActual?.phone ?: "No especificado")
                             }
-
                             if ((usuarioActual?.address ?: "").isNotBlank()) {
-                                ProfileInfoItem(
-                                    icon = Icons.Default.LocationOn,
-                                    label = "Dirección",
-                                    value = usuarioActual?.address ?: "No especificada"
-                                )
+                                ProfileInfoItem(icon = Icons.Default.LocationOn, label = "Dirección", value = usuarioActual?.address ?: "No especificada")
                             }
                         }
                     }
                 }
 
                 // Actions
-                AnimatedVisibility(
-                    visible = true,
-                    enter = fadeIn() + slideInVertically(
-                        initialOffsetY = { it },
-                        animationSpec = tween(800, delayMillis = 400)
-                    )
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                    shape = RoundedCornerShape(12.dp)
                 ) {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                        shape = RoundedCornerShape(12.dp)
+                    Column(
+                        modifier = Modifier.padding(20.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Column(
-                            modifier = Modifier.padding(20.dp)
-                        ) {
-                            Text(
-                                text = "Acciones",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFF2C3E50),
-                                modifier = Modifier.padding(bottom = 16.dp)
-                            )
-
-                            // Edit Profile Button
-                            OutlinedButton(
-                                onClick = { /* TODO: Implement edit profile */ },
+                        if (isInEditMode) {
+                            Button(
+                                onClick = {
+                                    authViewModel.updateUser(firstName, lastName, phone, address)
+                                    isInEditMode = false
+                                },
                                 modifier = Modifier.fillMaxWidth(),
-                                colors = ButtonDefaults.outlinedButtonColors(
-                                    contentColor = Color(0xFF6B73FF)
-                                )
+                                enabled = ValidadorFormularios.validarNombre(firstName).esValido &&
+                                        ValidadorFormularios.validarNombre(lastName).esValido &&
+                                        ValidadorFormularios.validarTelefono(phone).esValido &&
+                                        ValidadorFormularios.validarDireccion(address).esValido
                             ) {
-                                Icon(
-                                    Icons.Default.Edit,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(18.dp)
-                                )
+                                Icon(Icons.Default.Save, contentDescription = null)
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text("Guardar Cambios")
+                            }
+                            OutlinedButton(
+                                onClick = { isInEditMode = false },
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                Text("Cancelar")
+                            }
+                        } else {
+                            OutlinedButton(
+                                onClick = { isInEditMode = true },
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                Icon(Icons.Default.Edit, contentDescription = null)
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text("Editar Perfil")
                             }
-
-                            Spacer(modifier = Modifier.height(12.dp))
-
-                            // Logout Button
                             Button(
                                 onClick = { showLogoutDialog = true },
                                 modifier = Modifier.fillMaxWidth(),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xFFD32F2F)
-                                )
+                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F))
                             ) {
-                                Icon(
-                                    Icons.AutoMirrored.Filled.ExitToApp,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(18.dp)
-                                )
+                                Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = null)
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text("Cerrar Sesión")
                             }
                         }
                     }
                 }
-
-                Spacer(modifier = Modifier.height(32.dp))
             }
         }
 
-        // Logout Confirmation Dialog
         if (showLogoutDialog) {
             AlertDialog(
                 onDismissRequest = { showLogoutDialog = false },
@@ -407,7 +387,7 @@ fun ProfileScreen(
 
 @Composable
 fun ProfileInfoItem(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     label: String,
     value: String
 ) {

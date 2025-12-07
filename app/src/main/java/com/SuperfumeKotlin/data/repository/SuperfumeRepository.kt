@@ -9,7 +9,7 @@ import com.SuperfumeKotlin.data.model.Usuario
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.emitAll
-import com.superfume_movil.data.remote.RemoteDataSource
+import com.SuperfumeKotlin.data.remote.RemoteDataSource
 import javax.inject.Inject
 import javax.inject.Singleton
 

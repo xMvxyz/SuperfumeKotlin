@@ -160,6 +160,22 @@ class ViewModelAutenticacion @Inject constructor(
             }
         }
     }
+
+    fun updateUser(firstName: String, lastName: String, phone: String, address: String) {
+        viewModelScope.launch {
+            val currentUser = _usuarioActual.value
+            if (currentUser != null) {
+                val updatedUser = currentUser.copy(
+                    firstName = firstName,
+                    lastName = lastName,
+                    phone = phone,
+                    address = address
+                )
+                repositorio.actualizarUsuario(updatedUser)
+                _usuarioActual.value = updatedUser
+            }
+        }
+    }
     
     /**
      * Cierra la sesión del usuario actual

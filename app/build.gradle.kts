@@ -19,20 +19,9 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    signingConfigs {
-        create("release") {
-            // Keystore generado localmente para firmar el APK
-            storeFile = file("keystore/my-release-key.jks")
-            storePassword = "superfume123"
-            keyAlias = "superfume_key"
-            keyPassword = "superfume123"
-        }
-    }
-
     buildTypes {
         release {
             isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -43,14 +32,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
-        }
+    kotlinOptions {
+        jvmTarget = "11"
     }
     
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.8"
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
     
     // Configuración explícita para KSP
@@ -93,6 +80,10 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
     
     // Image Loading
     implementation(libs.coil.compose)
@@ -102,12 +93,6 @@ dependencies {
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
-    
-    // Networking (Retrofit + OkHttp)
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:okhttp:4.11.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
     
     // Permissions
     implementation(libs.accompanist.permissions)

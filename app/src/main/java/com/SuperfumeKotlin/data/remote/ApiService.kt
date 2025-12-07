@@ -1,6 +1,6 @@
-package com.superfume_movil.data.remote
+package com.SuperfumeKotlin.data.remote
 
-import com.superfume_movil.data.model.Perfume
+import com.SuperfumeKotlin.data.model.Perfume
 import retrofit2.http.GET
 import retrofit2.http.Path
 
