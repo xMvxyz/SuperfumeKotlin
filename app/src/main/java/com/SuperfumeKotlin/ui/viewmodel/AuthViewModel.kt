@@ -81,18 +81,14 @@ class ViewModelAutenticacion @Inject constructor(
      * @param contraseña Contraseña del usuario
      */
     fun iniciarSesion(email: String, contraseña: String) {
-        // Limpiar mensaje de error anterior
-        _mensajeError.value = null
-        
-        val validacionEmail = FormValidators.validateEmail(email)
-        if (!validacionEmail.isValid) {
-            _mensajeError.value = validacionEmail.errorMessage
+        // Validaciones básicas de campos vacíos
+        if (email.isBlank()) {
+            _mensajeError.value = "El email no puede estar vacío"
             return
         }
         
-        val validacionContraseña = FormValidators.validatePassword(contraseña)
-        if (!validacionContraseña.isValid) {
-            _mensajeError.value = validacionContraseña.errorMessage
+        if (contraseña.isBlank()) {
+            _mensajeError.value = "La contraseña no puede estar vacía"
             return
         }
         
@@ -106,11 +102,13 @@ class ViewModelAutenticacion @Inject constructor(
                     _estaLogueado.value = true
                     _mensajeError.value = null
                 } else {
-                    _mensajeError.value = TextResources.ERROR_INVALID_CREDENTIALS
+                    _mensajeError.value = "Email o contraseña incorrectos"
+                    _estaLogueado.value = false
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 _mensajeError.value = "Error al iniciar sesión: ${e.message ?: "Error desconocido"}"
+                _estaLogueado.value = false
             } finally {
                 _estaCargando.value = false
             }

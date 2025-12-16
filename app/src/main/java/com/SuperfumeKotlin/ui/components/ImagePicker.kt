@@ -160,8 +160,9 @@ fun ImagePicker(
                             if (cameraPermissionState.status.isGranted) {
                                 // Create temporary file for camera
                                 val tempFile = File(context.cacheDir, "temp_image_${System.currentTimeMillis()}.jpg")
-                                cameraImageUri = Uri.fromFile(tempFile)
-                                cameraLauncher.launch(cameraImageUri)
+                                val uri = Uri.fromFile(tempFile)
+                                cameraImageUri = uri
+                                cameraLauncher.launch(uri)
                             } else if (cameraPermissionState.status.shouldShowRationale) {
                                 // Show rationale dialog
                                 showImageSourceDialog = true
@@ -198,8 +199,9 @@ fun ImagePicker(
         if (cameraPermissionState.status.isGranted && showImageSourceDialog) {
             // If permission granted and dialog was open, launch camera
             val tempFile = File(context.cacheDir, "temp_image_${System.currentTimeMillis()}.jpg")
-            cameraImageUri = Uri.fromFile(tempFile)
-            cameraLauncher.launch(cameraImageUri)
+            val uri = Uri.fromFile(tempFile)
+            cameraImageUri = uri
+            cameraLauncher.launch(uri)
         }
     }
 }
