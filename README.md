@@ -1,253 +1,339 @@
-# SuperfumeKotlin
+# Proyecto Superfume
 
-## Descripción
+Este proyecto es una tienda de perfumes donde puedes comprar perfumes, gestionar tu carrito y realizar pedidos.
 
-SuperfumeKotlin es una aplicación móvil Android desarrollada en Kotlin que proporciona una plataforma completa para la venta y gestión de perfumes. La aplicación implementa arquitectura moderna con Jetpack Compose, ofreciendo una experiencia de usuario fluida y profesional.
+## Rutas principales del proyecto
 
-## Características Principales
+| Componente | Ruta principal |
+|------------|---------------|
+| MainActivity | app/src/main/java/com/SuperfumeKotlin/MainActivity.kt |
+| Login | app/src/main/java/com/SuperfumeKotlin/ui/screens/auth/LoginScreen.kt |
+| Registro | app/src/main/java/com/SuperfumeKotlin/ui/screens/auth/RegisterScreen.kt |
+| Home | app/src/main/java/com/SuperfumeKotlin/ui/screens/home/HomeScreen.kt |
+| Detalle Perfume | app/src/main/java/com/SuperfumeKotlin/ui/screens/perfume/PerfumeDetailScreen.kt |
+| Carrito | app/src/main/java/com/SuperfumeKotlin/ui/screens/cart/CartScreen.kt |
+| Perfil | app/src/main/java/com/SuperfumeKotlin/ui/screens/profile/ProfileScreen.kt |
+| Admin Panel | app/src/main/java/com/SuperfumeKotlin/ui/screens/admin/AdminScreen.kt |
+| Gestión Usuarios | app/src/main/java/com/SuperfumeKotlin/ui/screens/admin/UserManagementScreen.kt |
+| Agregar Perfume | app/src/main/java/com/SuperfumeKotlin/ui/screens/admin/AddPerfumeScreen.kt |
+| ViewModels | app/src/main/java/com/SuperfumeKotlin/ui/viewmodel/ |
+| Repositorio | app/src/main/java/com/SuperfumeKotlin/data/repository/ |
+| Modelos | app/src/main/java/com/SuperfumeKotlin/data/model/ |
+| DTOs | app/src/main/java/com/SuperfumeKotlin/data/model/dto/ |
+| Base de datos | app/src/main/java/com/SuperfumeKotlin/data/local/ |
+| API Service | app/src/main/java/com/SuperfumeKotlin/data/remote/ApiService.kt |
+| Navegación | app/src/main/java/com/SuperfumeKotlin/ui/navigation/SuperfumeNavigation.kt |
 
-### Gestión de Productos
-- Catálogo completo de perfumes con información detallada
-- Búsqueda y filtrado por categoría, marca y género
-- Visualización de detalles incluyendo precio, descripción, tamaño y disponibilidad
-- Gestión de inventario con control de stock
-- Soporte para imágenes de productos
+## Arquitectura
 
-### Sistema de Autenticación
-- Registro de nuevos usuarios
-- Inicio de sesión seguro
-- Gestión de perfiles de usuario
-- Actualización de información personal
+- MVVM (Model-View-ViewModel)
+- Supabase PostgreSQL (Base de datos remota)
+- Room Database (Caché local offline)
+- Jetpack Compose (UI declarativa)
+- Dagger Hilt (Inyección de dependencias)
+- Retrofit + OkHttp (Cliente HTTP)
+- Material Design 3
+- Kotlin Coroutines + Flow
+
+## Compilación
+
+```bash
+# Compilar la aplicación
+.\gradlew.bat assembleDebug
+
+# Generar APK firmado
+.\gradlew.bat assembleRelease
+
+# Limpiar y compilar
+.\gradlew.bat clean assembleDebug
+```
+
+## Funcionalidades Implementadas
+
+### Autenticación
+- Sistema de autenticación con backend Spring Boot
+- Login con email y contraseña
+- Registro de usuarios con validación de campos
+- Persistencia de sesión con EncryptedSharedPreferences
+- JWT Token para autenticación
+
+### Sistema de Roles
+- Roles de usuario (Admin/Cliente)
+- Admin (rol_id = 1): Acceso completo al panel de administración
+- Cliente (rol_id = 2): Acceso a catálogo, carrito y perfil
+- Navegación basada en permisos
+
+### Catálogo de Perfumes
+- Listado de perfumes desde base de datos remota
+- Búsqueda de perfumes por nombre
+- Filtros por categoría y género
+- Detalle completo de perfume
+
+### Gestión de Perfumes (Admin)
+- CRUD completo de perfumes
+- Agregar perfumes con todos los atributos (nombre, marca, precio, fragancia, notas, perfil)
+- Editar perfumes existentes
+- Eliminar perfumes
+- Gestión de stock
+
+### Gestión de Usuarios (Admin)
+- Listar todos los usuarios
+- Buscar usuarios por nombre o correo
+- Editar información de usuarios
+- Cambiar rol de usuarios (Admin/Cliente)
+- Eliminar usuarios
 
 ### Carrito de Compras
-- Agregar productos al carrito con cantidades personalizables
-- Actualización dinámica de cantidades
+- Agregar perfumes al carrito
+- Actualizar cantidades
+- Eliminar items del carrito
+- Vaciar carrito completo
+- Persistencia local con Room
 - Cálculo automático de totales
-- Eliminación de productos del carrito
-- Persistencia del carrito por usuario
 
-### Administración
-- Interfaz para agregar nuevos perfumes
-- Actualización de información de productos
-- Gestión de stock y disponibilidad
-- Captura de imágenes mediante cámara o galería
+
+### Navegación
+- Navigation Component con Jetpack Compose
+- Rutas protegidas según autenticación
+- Inicio en HomeScreen
+
+## Configuración de Variables de Entorno
+
+El proyecto usa un archivo `local.properties` para las credenciales sensibles:
+
+```properties
+# Supabase Configuration
+supabase.url=your_supabase_url
+supabase.anon.key=your_supabase_anon_key
+supabase.api.url=your_supabase_api_url
+
+# PostgreSQL Connection (Supabase)
+supabase.db.host=your_db_host
+supabase.db.port=5432
+supabase.db.name=postgres
+supabase.db.user=postgres
+supabase.db.password=your_db_password
+
+# Android SDK
+sdk.dir=C\:\\Users\\{user}\\AppData\\Local\\Android\\Sdk
+```
+
+### Backend Spring Boot
+
+El backend usa un archivo `.env` para configuración:
+
+```env
+# Database
+DB_PASSWORD=My_PASSWORD
+
+# JWT Secret
+JWT_SECRET=My_Secret
+```
+
+## Estructura de Base de Datos (Supabase PostgreSQL)
+
+### Tabla: perfumes
+- id (PK, auto-increment)
+- nombre
+- marca
+- precio (int)
+- stock (int)
+- descripcion
+- imagen_url
+- genero (Masculino, Femenino, Unisex)
+- fragancia (Frescos, Florales, Orientales, Amaderados, Cítricos)
+- notas
+- perfil
+
+### Tabla: usuarios
+- id (PK, auto-increment)
+- nombre
+- correo
+- contrasena (encriptada)
+- rut
+- telefono
+- direccion
+- rol_id (FK a roles)
+- created_at
+- updated_at
+
+### Tabla: roles
+- id (PK)
+- nombre (Admin, Cliente)
+
+### Tabla: carrito
+- id (PK, auto-increment)
+- usuario_id (FK a usuarios)
+- activo (boolean)
+- created_at
+- updated_at
+
+### Tabla: carrito_items
+- id (PK, auto-increment)
+- carrito_id (FK a carrito)
+- perfume_id (FK a perfumes)
+- cantidad
+- precio_unitario
+
+## Arquitectura de Capas
+
+### Capa de Presentación (UI)
+- Jetpack Compose
+- ViewModels (StateFlow)
+- Navigation Component
+
+### Capa de Dominio
+- Modelos de datos
+- DTOs (Request/Response)
+- Validadores de formularios
+
+### Capa de Datos
+- Repository Pattern
+- ApiService (Retrofit)
+- Room Database (DAO)
+- TokenManager (EncryptedSharedPreferences)
+
+### Inyección de Dependencias
+- Dagger Hilt
+- Módulos: DatabaseModule, NetworkModule
+
+## API Endpoints
+
+Ver documentación completa en: `SuperfumeSpringBoot/API_ENDPOINTS.md`
+
+### Principales endpoints:
+- POST /api/auth/login
+- POST /api/auth/register
+- GET /api/perfumes
+- POST /api/perfumes (Admin)
+- GET /api/usuario (Admin)
+- PUT /api/usuario/{id}/rol (Admin)
+- GET /api/carrito/usuario/{id}
+- POST /api/pedido
+- POST /api/pago
 
 ## Tecnologías Utilizadas
 
-### Framework y Lenguaje
-- **Kotlin 1.9.22**: Lenguaje de programación principal
-- **Android SDK**: Nivel mínimo 24, objetivo 34
-- **Jetpack Compose**: Framework moderno para UI declarativa
+### Frontend (Kotlin)
+- Kotlin 1.9+
+- Jetpack Compose
+- Material Design 3
+- Dagger Hilt
+- Room Database
+- Retrofit 2
+- OkHttp 3
+- Kotlin Coroutines
+- Kotlin Flow
+- Coil (Carga de imágenes)
+- EncryptedSharedPreferences
 
-### Arquitectura y Componentes
-- **MVVM Pattern**: Separación clara entre UI, lógica y datos
-- **Room Database 2.6.1**: Persistencia local de datos
-- **Hilt 2.48**: Inyección de dependencias
-- **Kotlin Coroutines**: Manejo asíncrono de operaciones
-- **StateFlow**: Gestión reactiva de estados
+### Backend (Spring Boot)
+- Java 17
+- Spring Boot 3.x
+- Spring Security
+- Spring Data JPA
+- PostgreSQL (Supabase)
+- JWT Authentication
+- Lombok
+- Maven
 
-### UI y Navegación
-- **Material Design 3**: Diseño moderno y consistente
-- **Navigation Compose 2.7.6**: Navegación entre pantallas
-- **CameraX 1.3.1**: Integración con cámara del dispositivo
+## Configuración del Proyecto
 
-### Testing
-- **JUnit 4.13.2**: Testing unitario
-- **Espresso 3.5.1**: Testing de UI
-- **Android Test Extensions**: Testing de componentes Android
+### Requisitos
+- Android Studio Hedgehog o superior
+- JDK 17
+- Gradle 8.0+
+- Android SDK 24+ (mínimo)
+- Android SDK 34 (target)
+
+### Instalación
+
+1. Clonar el repositorio
+```bash
+git clone https://github.com/xMvxyz/SuperfumeKotlin.git
+git clone https://github.com/xMvxyz/SuperfumeSpringBoot.git
+```
+
+2. Configurar `local.properties` en SuperfumeKotlin
+```properties
+supabase.url=https://your-project.supabase.co
+supabase.anon.key=your_anon_key
+sdk.dir=C\:\\Users\\{user}\\AppData\\Local\\Android\\Sdk
+```
+
+3. Configurar `.env` en SuperfumeSpringBoot
+```env
+DB_PASSWORD=your_password
+JWT_SECRET=your_secret
+```
+
+4. Compilar el backend
+```bash
+cd SuperfumeSpringBoot
+mvn clean install
+mvn spring-boot:run
+```
+
+5. Compilar la app móvil
+```bash
+cd SuperfumeKotlin
+.\gradlew.bat assembleDebug
+```
+
+## Ejecución
+
+### Backend
+```bash
+cd SuperfumeSpringBoot
+mvn spring-boot:run
+```
+
+### App Móvil
+1. Abrir Android Studio
+2. Abrir proyecto SuperfumeKotlin
+3. Ejecutar en emulador o dispositivo físico
+4. O instalar APK:
+```bash
+adb install app\build\outputs\apk\debug\superfume-arm64-v8a-debug.apk
+```
 
 ## Estructura del Proyecto
 
 ```
-app/src/main/java/com/SuperfumeKotlin/
-├── data/
-│   ├── dao/                    # Data Access Objects
-│   │   ├── CartDao.kt         # Operaciones del carrito
-│   │   ├── PerfumeDao.kt      # Operaciones de perfumes
-│   │   └── UserDao.kt         # Operaciones de usuarios
-│   ├── database/
-│   │   └── SuperfumeDatabase.kt  # Configuración de Room
-│   ├── model/                 # Entidades de datos
-│   │   ├── CartItem.kt        # Modelo de elemento del carrito
-│   │   ├── Perfume.kt         # Modelo de perfume
-│   │   └── User.kt            # Modelo de usuario
-│   ├── repository/
-│   │   └── SuperfumeRepository.kt  # Capa de repositorio
-│   └── DataInitializer.kt     # Datos iniciales
-├── di/
-│   └── DatabaseModule.kt      # Módulos de Hilt
-├── ui/
-│   ├── components/            # Componentes reutilizables
-│   │   ├── AdvancedImagePicker.kt
-│   │   ├── CameraPreview.kt
-│   │   ├── ImagePicker.kt
-│   │   └── ValidatedTextField.kt
-│   ├── navigation/
-│   │   └── SuperfumeNavigation.kt  # Configuración de rutas
-│   ├── screens/               # Pantallas de la aplicación
-│   │   ├── admin/
-│   │   │   └── AddPerfumeScreen.kt
-│   │   ├── auth/
-│   │   │   ├── LoginScreen.kt
-│   │   │   └── RegisterScreen.kt
-│   │   ├── cart/
-│   │   │   └── CartScreen.kt
-│   │   ├── home/
-│   │   │   └── HomeScreen.kt
-│   │   ├── perfume/
-│   │   │   └── PerfumeDetailScreen.kt
-│   │   └── profile/
-│   │       └── ProfileScreen.kt
-│   ├── theme/                 # Configuración de tema
-│   │   ├── Color.kt
-│   │   ├── Theme.kt
-│   │   └── Type.kt
-│   └── viewmodel/            # ViewModels
-│       ├── AuthViewModel.kt
-│       ├── CartViewModel.kt
-│       └── PerfumeViewModel.kt
-├── util/                      # Utilidades
-│   ├── Constantes.kt
-│   ├── FormValidator.kt
-│   └── TextResources.kt
-├── MainActivity.kt            # Actividad principal
-└── SuperfumeApplication.kt   # Clase Application
+SuperfumeKotlin/
+├── app/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/com/SuperfumeKotlin/
+│   │   │   │   ├── data/
+│   │   │   │   │   ├── local/        # Room Database
+│   │   │   │   │   ├── model/        # Modelos y DTOs
+│   │   │   │   │   ├── remote/       # API Service
+│   │   │   │   │   └── repository/   # Repositorios
+│   │   │   │   ├── di/               # Dagger Hilt
+│   │   │   │   ├── ui/
+│   │   │   │   │   ├── navigation/   # Navegación
+│   │   │   │   │   ├── screens/      # Pantallas Compose
+│   │   │   │   │   └── viewmodel/    # ViewModels
+│   │   │   │   └── util/             # Utilidades
+│   │   │   └── res/                  # Recursos
+│   │   └── build.gradle.kts
+│   └── local.properties
+└── README.md
 
+SuperfumeSpringBoot/
+├── src/
+│   ├── main/
+│   │   ├── java/Superfume/Superfume/
+│   │   │   ├── Controller/
+│   │   │   ├── Dto/
+│   │   │   ├── Mapper/
+│   │   │   ├── Model/
+│   │   │   ├── Repository/
+│   │   │   ├── Security/
+│   │   │   └── Service/
+│   │   └── resources/
+│   │       └── application.properties
+│   └── .env
+└── pom.xml
 ```
-
-
-
-## Instalación y Configuración
-
-### Requisitos Previos
-- Android Studio Hedgehog (2023.1.1) o superior
-- JDK 11 o superior
-- Android SDK 34
-- Dispositivo o emulador con Android 7.0 (API 24) o superior
-
-### Pasos de Instalación
-
-1. Clonar el repositorio:
-```bash
-git clone https://github.com/xMvxyz/SuperfumeKotlin.git
-cd SuperfumeKotlin
-```
-
-2. Abrir el proyecto en Android Studio
-
-3. Sincronizar dependencias de Gradle:
-```bash
-./gradlew build
-```
-
-4. Ejecutar la aplicación:
-- Conectar un dispositivo Android o iniciar un emulador
-- Presionar Run en Android Studio o ejecutar:
-```bash
-./gradlew installDebug
-```
-
-## Configuración del Proyecto
-
-### Gradle
-
-El proyecto utiliza Gradle Version Catalogs para gestión de dependencias. Las versiones se encuentran en `gradle/libs.versions.toml`.
-
-### Permisos Requeridos
-
-La aplicación solicita los siguientes permisos:
-- `CAMERA`: Para capturar imágenes de productos
-- `READ_EXTERNAL_STORAGE`: Para seleccionar imágenes de la galería
-- `WRITE_EXTERNAL_STORAGE`: Para guardar imágenes
-- `READ_MEDIA_IMAGES`: Para acceso a imágenes en Android 13+
-
-## Uso de la Aplicación
-
-### Flujo de Usuario
-
-1. **Registro/Login**: Los usuarios deben crear una cuenta o iniciar sesión
-2. **Exploración**: Navegar por el catálogo de perfumes
-3. **Búsqueda**: Utilizar filtros para encontrar productos específicos
-4. **Detalles**: Ver información completa del producto
-5. **Carrito**: Agregar productos con cantidades deseadas
-6. **Checkout**: Revisar y finalizar la compra
-
-### Funcionalidades de Administración
-
-Los administradores pueden:
-- Agregar nuevos perfumes con imágenes
-- Actualizar información de productos existentes
-- Gestionar inventario y stock
-
-## Arquitectura
-
-### Patrón MVVM
-
-```
-View (Composables)
-    ↓
-ViewModel (StateFlow)
-    ↓
-Repository (Abstracción)
-    ↓
-DAO (Room)
-    ↓
-Database (PostqreSQL)
-```
-
-## Testing
-
-### Tests Unitarios
-```bash
-./gradlew test
-```
-
-### Tests de Instrumentación
-```bash
-./gradlew connectedAndroidTest
-```
-
-## Construcción de Release
-
-```bash
-./gradlew assembleRelease
-```
-
-El APK se generará en: `app/build/outputs/apk/release/`
-
-## Versionado
-
-- **Version Code**: 1
-- **Version Name**: 1.0
-
-## Licencia
-
-Este proyecto es de código propietario.
-
-## Autores
-
-- Desarrollador Principal: xMvxyz
-- Repositorio: https://github.com/xMvxyz/SuperfumeKotlin
-
-## Próximas Características
-
-- Integración con pasarelas de pago
-- Sistema de reseñas y calificaciones
-- Notificaciones push
-- Wishlist de productos
-- Historial de pedidos
-- Backend REST API
-- Sincronización en la nube
-- Modo offline mejorado
-
-## Notas de Desarrollo
-
-### Compilación Exitosa
-El proyecto está configurado con:
-- Kotlin Compiler Extension: 1.5.8
-- KSP para procesamiento de anotaciones de Room
-- Build Config habilitado
-- ProGuard configurado para release
-
-
-Última actualización: Noviembre 2025

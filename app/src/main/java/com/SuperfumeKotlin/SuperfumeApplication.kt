@@ -8,7 +8,7 @@ import dagger.hilt.android.HiltAndroidApp
  * Configura Hilt para inyección de dependencias
  */
 @HiltAndroidApp
-class AplicacionSuperfume : Application() {
+class SuperfumeApplication : Application() {
     override fun onCreate() {
         super.onCreate()
     }
