@@ -321,3 +321,40 @@ SuperfumeKotlin/
 │   └── local.properties
 └── README.md
 
+```
+## Paso a paso para generar una APK firmada para publicar en Google Play Store o distribuir,:
+
+### 1.Build → Generate Signed Bundle / APK
+
+<img width="340" height="392" alt="image" src="https://github.com/user-attachments/assets/30988c96-817d-42e9-8d01-0cd21be925ee" />
+
+### 2.Selecciona APK
+
+<img width="565" height="395" alt="image" src="https://github.com/user-attachments/assets/079721aa-87f9-45a6-b3f4-a7395a702b5a" />
+
+### 3.Click Next
+
+### 4.Crear nuevo keystore (primera vez):
+
+<img width="561" height="376" alt="image" src="https://github.com/user-attachments/assets/5ebdf1cc-dfba-4cb8-87ac-70adcae26c95" />
+
+### 5.Click Create new
+
+#### Key store path: Elige ubicación (ej: C:\Users\maxim\superfume-keystore.jks)
+#### Password: Crea una contraseña segura
+#### Alias: superfume-key
+#### Password (alias): Misma u otra contraseña
+#### Validity: 25 años (mínimo para Play Store)
+#### Certificate:
+#### First and Last Name: Tu nombre
+#### Organization: Tu organización
+#### City, State, Country: Tu ubicación
+#### Click OK
+
+<img width="524" height="607" alt="image" src="https://github.com/user-attachments/assets/89d85f61-b2ab-4646-803e-1391d36d5e42" />
+
+### 6.Selecciona release
+
+<img width="563" height="392" alt="image" src="https://github.com/user-attachments/assets/a712c290-5777-4147-8058-e05e8bc9eef4" />
+
+### y listo!
