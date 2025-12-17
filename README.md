@@ -321,19 +321,3 @@ SuperfumeKotlin/
 │   └── local.properties
 └── README.md
 
-SuperfumeSpringBoot/
-├── src/
-│   ├── main/
-│   │   ├── java/Superfume/Superfume/
-│   │   │   ├── Controller/
-│   │   │   ├── Dto/
-│   │   │   ├── Mapper/
-│   │   │   ├── Model/
-│   │   │   ├── Repository/
-│   │   │   ├── Security/
-│   │   │   └── Service/
-│   │   └── resources/
-│   │       └── application.properties
-│   └── .env
-└── pom.xml
-```
