@@ -38,14 +38,17 @@ fun HomeScreen(
     onNavigateToPerfumeDetail: (Long) -> Unit,
     onNavigateToCart: () -> Unit,
     onNavigateToProfile: () -> Unit,
+    onNavigateToLogin: () -> Unit = {},
     onNavigateToAddPerfume: () -> Unit,
-    viewModel: ViewModelPerfume = hiltViewModel()
+    viewModel: ViewModelPerfume = hiltViewModel(),
+    authViewModel: com.SuperfumeKotlin.ui.viewmodel.ViewModelAutenticacion = hiltViewModel()
 ) {
     val perfumes by viewModel.perfumes.collectAsState()
     val estaCargando by viewModel.estaCargando.collectAsState()
     val consultaBusqueda by viewModel.consultaBusqueda.collectAsState()
     val categoriaSeleccionada by viewModel.categoriaSeleccionada.collectAsState()
     val generoSeleccionado by viewModel.generoSeleccionado.collectAsState()
+    val estaLogueado by authViewModel.estaLogueado.collectAsState()
     
     var searchText by remember { mutableStateOf("") }
     var showSearchBar by remember { mutableStateOf(false) }
@@ -85,7 +88,13 @@ fun HomeScreen(
                             tint = Color.White
                         )
                     }
-                    IconButton(onClick = onNavigateToProfile) {
+                    IconButton(onClick = {
+                        if (estaLogueado) {
+                            onNavigateToProfile()
+                        } else {
+                            onNavigateToLogin()
+                        }
+                    }) {
                         Icon(
                             Icons.Default.Person,
                             contentDescription = "Perfil",

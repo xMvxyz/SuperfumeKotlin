@@ -1,0 +1,24 @@
+# Configuración de Supabase - EJEMPLO
+# Copia este archivo a 'local.properties' y completa con tus datos reales
+# IMPORTANTE: 'local.properties' NO debe subirse a Git (ya está en .gitignore)
+
+# ============================================
+# DATOS DE SUPABASE
+# ============================================
+# Obtén estos valores desde: https://app.supabase.com/project/_/settings/api
+
+# URL de tu proyecto Supabase
+supabase.url=https://xxxxxxxxxxx.supabase.co
+
+# Anon Key (clave pública - segura para usar en el cliente)
+supabase.anon.key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ey...
+
+# URL base de la API REST de Supabase
+supabase.api.url=https://xxxxxxxxxxx.supabase.co/rest/v1
+
+supabase.db.host=db.xxxxxxxxxxx.supabase.co
+supabase.db.port=5432
+supabase.db.name=postgres
+supabase.db.user=postgres
+supabase.db.password=tu_password_postgresql_aqui
+

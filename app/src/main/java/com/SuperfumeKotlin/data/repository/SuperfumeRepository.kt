@@ -10,6 +10,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.emitAll
 import com.SuperfumeKotlin.data.remote.RemoteDataSource
+import com.SuperfumeKotlin.data.remote.ApiService
+import com.SuperfumeKotlin.data.model.dto.request.*
+import com.SuperfumeKotlin.data.model.dto.response.*
+import com.SuperfumeKotlin.util.TokenManager
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,27 +27,50 @@ class RepositorioSuperfume @Inject constructor(
     private val daoPerfume: DaoPerfume,
     private val daoUsuario: DaoUsuario,
     private val daoCarrito: DaoCarrito,
-    private val remoteDataSource: RemoteDataSource? = null
+    private val remoteDataSource: RemoteDataSource? = null,
+    private val apiService: ApiService,
+    private val tokenManager: TokenManager
 ) {
     
     // ========== OPERACIONES DE PERFUMES ==========
     
     /**
      * Obtiene todos los perfumes disponibles
+     * Intenta cargar desde el backend, si falla usa datos locales de Room
      * @return Flow con la lista de perfumes disponibles
      */
     fun obtenerTodosLosPerfumesDisponibles(): Flow<List<Perfume>> = flow {
-        // Emite primero los datos locales desde Room
+        // Primero emite datos locales (cache)
         emitAll(daoPerfume.obtenerTodosLosPerfumesDisponibles())
-
-        // Intenta refrescar desde el backend y guardar en la BD local
+        
+        // Intenta actualizar desde el backend
         try {
-            val remotos = remoteDataSource?.obtenerPerfumes() ?: emptyList()
-            if (remotos.isNotEmpty()) {
-                remotos.forEach { daoPerfume.insertarPerfume(it) }
+            val response = apiService.getPerfumes()
+            if (response.isSuccessful) {
+                response.body()?.let { perfumesDto ->
+                    // Convertir DTOs a modelos locales y guardar en Room
+                    val perfumesLocales = perfumesDto.map { dto ->
+                        Perfume(
+                            id = dto.id.toLong(),
+                            name = dto.nombre,
+                            brand = dto.marca,
+                            price = dto.precio.toInt(),
+                            description = dto.descripcion ?: "",
+                            imageUri = dto.imagenUrl,
+                            category = dto.fragancia ?: "General",
+                            size = "50ml", // Default
+                            gender = dto.genero ?: "Unisex",
+                            isAvailable = dto.stock > 0,
+                            stock = dto.stock
+                        )
+                    }
+                    // Guardar en Room para uso offline
+                    perfumesLocales.forEach { daoPerfume.insertarPerfume(it) }
+                }
             }
-        } catch (_: Exception) {
-            // Ignorar errores de red; mantenemos datos locales
+        } catch (e: Exception) {
+            // Si falla la conexión, los datos locales ya fueron emitidos
+            e.printStackTrace()
         }
     }
     
@@ -206,4 +233,117 @@ class RepositorioSuperfume @Inject constructor(
      */
     suspend fun vaciarCarritoPorUsuario(idUsuario: Long) = 
         daoCarrito.vaciarCarritoPorUsuario(idUsuario)
+    
+    // ========== OPERACIONES DE BACKEND API ==========
+    
+    /**
+     * Inicia sesión usando el backend
+     * Guarda el usuario en Room para acceso offline
+     */
+    suspend fun login(email: String, password: String): LoginResponse? {
+        return try {
+            val request = LoginRequest(email, password)
+            val response = apiService.login(request)
+            if (response.isSuccessful) {
+                val loginResponse = response.body()
+                // Guardar usuario en Room para acceso offline
+                loginResponse?.usuario?.let { userDto ->
+                    val usuario = Usuario(
+                        id = userDto.id.toLong(),
+                        email = userDto.correo,
+                        password = "", // No guardar contraseña
+                        firstName = userDto.nombre.split(" ").firstOrNull() ?: userDto.nombre,
+                        lastName = userDto.nombre.split(" ").drop(1).joinToString(" "),
+                        phone = userDto.telefono,
+                        address = userDto.direccion
+                    )
+                    daoUsuario.insertarUsuario(usuario)
+                }
+                loginResponse
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            // Intentar autenticación offline
+            val usuario = daoUsuario.autenticarUsuario(email, password)
+            if (usuario != null) {
+                // Crear respuesta simulada desde datos locales
+                LoginResponse(
+                    success = true,
+                    mensaje = "Sesión offline",
+                    usuario = null,
+                    token = null
+                )
+            } else {
+                null
+            }
+        }
+    }
+    
+    /**
+     * Registra un nuevo usuario usando el backend
+     * Guarda el usuario en Room para acceso offline
+     */
+    suspend fun register(
+        name: String,
+        email: String,
+        password: String,
+        rut: String?,
+        phone: String?,
+        address: String?
+    ): LoginResponse? {
+        return try {
+            val request = RegisterRequest(name, email, password, rut, phone, address)
+            val response = apiService.register(request)
+            if (response.isSuccessful) {
+                val loginResponse = response.body()
+                // Guardar usuario en Room
+                loginResponse?.usuario?.let { userDto ->
+                    val usuario = Usuario(
+                        id = userDto.id.toLong(),
+                        email = userDto.correo,
+                        password = password, // Guardar para autenticación offline
+                        firstName = name.split(" ").firstOrNull() ?: name,
+                        lastName = name.split(" ").drop(1).joinToString(" "),
+                        phone = phone,
+                        address = address
+                    )
+                    daoUsuario.insertarUsuario(usuario)
+                }
+                loginResponse
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+    
+    /**
+     * Guarda el token JWT
+     */
+    fun saveToken(token: String) {
+        tokenManager.saveToken(token)
+    }
+    
+    /**
+     * Guarda información del usuario
+     */
+    fun saveUserInfo(userId: Int, email: String) {
+        tokenManager.saveUserInfo(userId, email)
+    }
+    
+    /**
+     * Obtiene el token guardado
+     */
+    fun getToken(): String? = tokenManager.getToken()
+    
+    /**
+     * Limpia el token y la sesión
+     */
+    fun clearSession() {
+        tokenManager.clearAll()
+    }
 }

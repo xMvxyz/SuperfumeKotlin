@@ -25,10 +25,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import android.Manifest
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import coil.compose.rememberAsyncImagePainter
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import com.SuperfumeKotlin.data.model.Usuario
+import com.SuperfumeKotlin.ui.viewmodel.NavegacionEvento
 import com.SuperfumeKotlin.ui.viewmodel.ViewModelAutenticacion
 import com.SuperfumeKotlin.util.ValidationResult
 import com.SuperfumeKotlin.util.FormValidators
+import com.SuperfumeKotlin.util.ImagePickerHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,7 +54,6 @@ fun RegisterScreen(
 ) {
     val estaCargando by viewModel.estaCargando.collectAsState()
     val mensajeError by viewModel.mensajeError.collectAsState()
-    val estaLogueado by viewModel.estaLogueado.collectAsState()
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -47,7 +61,28 @@ fun RegisterScreen(
     var lastName by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
+    var rut by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    var profileImageUri by remember { mutableStateOf<Uri?>(null) }
+    var showImageSourceDialog by remember { mutableStateOf(false) }
+    
+    val context = LocalContext.current
+    
+    // Launcher para galería
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { profileImageUri = it }
+    }
+    
+    // Launcher para cámara
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (!success) {
+            profileImageUri = null
+        }
+    }
 
     // Validations
     val nombreValidation = remember(firstName) { FormValidators.validateName(firstName) }
@@ -108,6 +143,43 @@ fun RegisterScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text("Crear Cuenta", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFF2C3E50), modifier = Modifier.padding(bottom = 8.dp))
+                    
+                    // Foto de perfil
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(100.dp)
+                                .clip(CircleShape)
+                                .background(Color.LightGray)
+                                .clickable { showImageSourceDialog = true },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            if (profileImageUri != null) {
+                                Image(
+                                    painter = rememberAsyncImagePainter(profileImageUri),
+                                    contentDescription = "Foto de perfil",
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentScale = ContentScale.Crop
+                                )
+                            } else {
+                                Icon(
+                                    imageVector = Icons.Default.Person,
+                                    contentDescription = "Agregar foto",
+                                    modifier = Modifier.size(50.dp),
+                                    tint = Color.Gray
+                                )
+                            }
+                        }
+                        Text(
+                            "Toca para agregar foto",
+                            fontSize = 12.sp,
+                            color = Color.Gray,
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
+                    }
 
                     // Nombre
                     OutlinedTextField(value = firstName, onValueChange = { firstName = it }, label = { Text("Nombre") }, isError = !nombreValidation.isValid && firstName.isNotEmpty(), supportingText = { if (!nombreValidation.isValid && firstName.isNotEmpty()) Text(nombreValidation.errorMessage ?: "") })
@@ -123,6 +195,14 @@ fun RegisterScreen(
                     
                     // Direccion
                     OutlinedTextField(value = address, onValueChange = { address = it }, label = { Text("Dirección") }, isError = !direccionValidation.isValid && address.isNotEmpty(), supportingText = { if (!direccionValidation.isValid && address.isNotEmpty()) Text(direccionValidation.errorMessage ?: "") })
+                    
+                    // RUT
+                    OutlinedTextField(
+                        value = rut,
+                        onValueChange = { rut = it },
+                        label = { Text("RUT (opcional)") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
 
                     // Contraseña
                     OutlinedTextField(
@@ -146,7 +226,8 @@ fun RegisterScreen(
                     Button(
                         onClick = {
                             val usuario = Usuario(email = email, password = password, firstName = firstName, lastName = lastName, phone = phone, address = address)
-                            viewModel.registrarUsuario(usuario)
+                            viewModel.registrarUsuario(usuario, rut = if (rut.isNotBlank()) rut else null)
+                            profileImageUri?.let { viewModel.updateProfileImage(it) }
                         },
                         modifier = Modifier.fillMaxWidth().padding(top = 8.dp).height(50.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6B73FF)),
@@ -176,6 +257,59 @@ fun RegisterScreen(
                         }
                     }
                 }
+            }
+            
+            // Diálogo para seleccionar fuente de imagen
+            if (showImageSourceDialog) {
+                AlertDialog(
+                    onDismissRequest = { showImageSourceDialog = false },
+                    title = { Text("Seleccionar foto") },
+                    text = {
+                        Column {
+                            TextButton(
+                                onClick = {
+                                    showImageSourceDialog = false
+                                    galleryLauncher.launch("image/*")
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Icon(Icons.Default.Photo, "Galería")
+                                    Spacer(modifier = Modifier.width(16.dp))
+                                    Text("Seleccionar de galería")
+                                }
+                            }
+                            TextButton(
+                                onClick = {
+                                    showImageSourceDialog = false
+                                    val uri = ImagePickerHelper.createImageUri(context)
+                                    profileImageUri = uri
+                                    cameraLauncher.launch(uri)
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Start,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Icon(Icons.Default.CameraAlt, "Cámara")
+                                    Spacer(modifier = Modifier.width(16.dp))
+                                    Text("Tomar foto")
+                                }
+                            }
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(onClick = { showImageSourceDialog = false }) {
+                            Text("Cancelar")
+                        }
+                    }
+                )
             }
         }
     }

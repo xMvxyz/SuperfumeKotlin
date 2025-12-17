@@ -1,9 +1,7 @@
 package com.SuperfumeKotlin.data.database
 
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
-import android.content.Context
 import com.SuperfumeKotlin.data.dao.DaoCarrito
 import com.SuperfumeKotlin.data.dao.DaoPerfume
 import com.SuperfumeKotlin.data.dao.DaoUsuario
@@ -21,25 +19,8 @@ import com.SuperfumeKotlin.util.Constants
     version = Constants.DATABASE_VERSION,
     exportSchema = false
 )
-abstract class BaseDatosSuperfume : RoomDatabase() {
-    abstract fun daoPerfume(): DaoPerfume
-    abstract fun daoUsuario(): DaoUsuario
-    abstract fun daoCarrito(): DaoCarrito
-    
-    companion object {
-        @Volatile
-        private var INSTANCIA: BaseDatosSuperfume? = null
-        
-        fun obtenerBaseDatos(context: Context): BaseDatosSuperfume {
-            return INSTANCIA ?: synchronized(this) {
-                val instancia = Room.databaseBuilder(
-                    context.applicationContext,
-                    BaseDatosSuperfume::class.java,
-                    Constants.DATABASE_NAME
-                ).build()
-                INSTANCIA = instancia
-                instancia
-            }
-        }
-    }
+abstract class SuperfumeDatabase : RoomDatabase() {
+    abstract fun perfumeDao(): DaoPerfume
+    abstract fun userDao(): DaoUsuario
+    abstract fun cartDao(): DaoCarrito
 }

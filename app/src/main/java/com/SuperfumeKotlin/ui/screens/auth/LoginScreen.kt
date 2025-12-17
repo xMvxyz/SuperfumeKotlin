@@ -3,10 +3,7 @@ package com.SuperfumeKotlin.ui.screens.auth
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -19,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -27,12 +23,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.collectAsState
+import com.SuperfumeKotlin.ui.viewmodel.NavegacionEvento
 import com.SuperfumeKotlin.ui.viewmodel.ViewModelAutenticacion
-import com.SuperfumeKotlin.ui.components.CampoTextoValidado
-import com.SuperfumeKotlin.util.TextResources
-import com.SuperfumeKotlin.util.FormValidators.validateEmail
-import com.SuperfumeKotlin.util.FormValidators.validatePassword
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,22 +33,20 @@ fun LoginScreen(
     onNavigateToHome: () -> Unit,
     viewModel: ViewModelAutenticacion
 ) {
-    val formularioLogin by viewModel.formularioLogin.collectAsState()
     val estaCargando by viewModel.estaCargando.collectAsState()
     val mensajeError by viewModel.mensajeError.collectAsState()
-    val estaLogueado by viewModel.estaLogueado.collectAsState()
-    
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-    
+
     // Limpiar error cuando el usuario cambia los campos
     LaunchedEffect(email, password) {
         if (mensajeError != null) {
             viewModel.limpiarError()
         }
     }
-    
+
     // Observar eventos de navegación de un solo uso
     LaunchedEffect(Unit) {
         viewModel.eventoNavegacion.collect { evento ->
@@ -65,7 +55,7 @@ fun LoginScreen(
             }
         }
     }
-    
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -112,7 +102,7 @@ fun LoginScreen(
                     )
                 }
             }
-            
+
             // Login Form
             AnimatedVisibility(
                 visible = true,
@@ -141,7 +131,7 @@ fun LoginScreen(
                             color = Color(0xFF2C3E50),
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
-                        
+
                         // Email Field
                         OutlinedTextField(
                             value = email,
@@ -158,7 +148,7 @@ fun LoginScreen(
                             ),
                             singleLine = true
                         )
-                        
+
                         // Password Field
                         OutlinedTextField(
                             value = password,
@@ -184,7 +174,7 @@ fun LoginScreen(
                             ),
                             singleLine = true
                         )
-                        
+
                         // Error Message
                         AnimatedVisibility(visible = mensajeError != null) {
                             Card(
@@ -200,7 +190,7 @@ fun LoginScreen(
                                 )
                             }
                         }
-                        
+
                         // Login Button
                         Button(
                             onClick = {
@@ -227,7 +217,7 @@ fun LoginScreen(
                                 )
                             }
                         }
-                        
+
                         // Register Link
                         Row(
                             modifier = Modifier.fillMaxWidth(),

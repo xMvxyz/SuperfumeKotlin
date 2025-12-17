@@ -8,5 +8,5 @@ import javax.inject.Singleton
 class RemoteDataSource @Inject constructor(
     private val api: ApiService
 ) {
-    suspend fun obtenerPerfumes(): List<Perfume> = api.getPerfumes()
+    suspend fun obtenerPerfumes() = api.getPerfumes()
 }

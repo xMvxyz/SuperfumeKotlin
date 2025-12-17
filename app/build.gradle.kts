@@ -117,6 +117,9 @@ dependencies {
     // Permissions
     implementation(libs.accompanist.permissions)
     
+    // Security - Encrypted SharedPreferences
+    implementation(libs.androidx.security.crypto)
+    
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

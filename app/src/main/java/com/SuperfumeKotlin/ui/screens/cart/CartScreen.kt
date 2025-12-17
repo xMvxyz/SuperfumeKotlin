@@ -37,10 +37,12 @@ import com.SuperfumeKotlin.ui.viewmodel.ViewModelAutenticacion
 fun CartScreen(
     onNavigateBack: () -> Unit,
     onNavigateToHome: () -> Unit,
+    onNavigateToLogin: () -> Unit = {},
     cartViewModel: ViewModelCarrito = hiltViewModel(),
     authViewModel: ViewModelAutenticacion
 ) {
     val usuarioActual by authViewModel.usuarioActual.collectAsState()
+    val estaLogueado by authViewModel.estaLogueado.collectAsState()
     val elementosCarrito by cartViewModel.elementosCarrito.collectAsState()
     val perfumesCarrito by cartViewModel.perfumesCarrito.collectAsState()
     val precioTotal by cartViewModel.precioTotal.collectAsState()
@@ -48,6 +50,13 @@ fun CartScreen(
     val estaCargando by cartViewModel.estaCargando.collectAsState()
     
     var showOrderPlaced by remember { mutableStateOf(false) }
+    
+    // Verificar autenticación
+    LaunchedEffect(estaLogueado) {
+        if (!estaLogueado) {
+            onNavigateToLogin()
+        }
+    }
     
     LaunchedEffect(usuarioActual) {
         usuarioActual?.let { user ->

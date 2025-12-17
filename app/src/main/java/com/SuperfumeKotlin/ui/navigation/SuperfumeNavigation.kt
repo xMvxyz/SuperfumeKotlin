@@ -25,7 +25,7 @@ fun NavegacionSuperfume(navController: NavHostController) {
 
     NavHost(
         navController = navController,
-        startDestination = Constants.ROUTE_LOGIN
+        startDestination = Constants.ROUTE_HOME
     ) {
         composable(Constants.ROUTE_LOGIN) {
             LoginScreen(
@@ -97,6 +97,11 @@ fun NavegacionSuperfume(navController: NavHostController) {
                 },
                 onNavigateToHome = {
                     navController.navigate(Constants.ROUTE_HOME) {
+                        popUpTo(Constants.ROUTE_CART) { inclusive = true }
+                    }
+                },
+                onNavigateToLogin = {
+                    navController.navigate(Constants.ROUTE_LOGIN) {
                         popUpTo(Constants.ROUTE_CART) { inclusive = true }
                     }
                 }

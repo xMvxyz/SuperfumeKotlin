@@ -83,7 +83,7 @@ class ViewModelAutenticacion @Inject constructor(
     }
     
     /**
-     * Inicia sesión con email y contraseña
+     * Inicia sesión con email y contraseña usando el backend
      * @param email Email del usuario
      * @param contraseña Contraseña del usuario
      */
@@ -103,14 +103,32 @@ class ViewModelAutenticacion @Inject constructor(
             _estaCargando.value = true
             _mensajeError.value = null
             try {
-                val usuario = repositorio.autenticarUsuario(email.trim(), contraseña)
-                if (usuario != null) {
-                    _usuarioActual.value = usuario
+                val response = repositorio.login(email.trim(), contraseña)
+                if (response != null && response.success) {
+                    // Guardar token
+                    response.token?.let { repositorio.saveToken(it) }
+                    
+                    // Guardar info del usuario
+                    response.usuario?.let { user ->
+                        repositorio.saveUserInfo(user.id, user.correo)
+                        // Convertir UsuarioResponse a Usuario local
+                        val usuario = Usuario(
+                            id = user.id.toLong(),
+                            email = user.correo,
+                            password = "", // No guardamos la contraseña
+                            firstName = user.nombre.split(" ").firstOrNull() ?: user.nombre,
+                            lastName = user.nombre.split(" ").drop(1).joinToString(" "),
+                            phone = user.telefono,
+                            address = user.direccion
+                        )
+                        _usuarioActual.value = usuario
+                    }
+                    
                     _estaLogueado.value = true
                     _mensajeError.value = null
                     _eventoNavegacion.emit(NavegacionEvento.NavegarAHome)
                 } else {
-                    _mensajeError.value = "Email o contraseña incorrectos"
+                    _mensajeError.value = response?.mensaje ?: "Error al iniciar sesión"
                     _estaLogueado.value = false
                 }
             } catch (e: Exception) {
@@ -124,10 +142,10 @@ class ViewModelAutenticacion @Inject constructor(
     }
     
     /**
-     * Registra un nuevo usuario
+     * Registra un nuevo usuario usando el backend
      * @param usuario Usuario a registrar
      */
-    fun registrarUsuario(usuario: Usuario) {
+    fun registrarUsuario(usuario: Usuario, rut: String? = null) {
         // Limpiar mensaje de error anterior
         _mensajeError.value = null
         
@@ -159,15 +177,39 @@ class ViewModelAutenticacion @Inject constructor(
             _estaCargando.value = true
             _mensajeError.value = null
             try {
-                val usuarioExistente = repositorio.obtenerUsuarioPorEmail(usuario.email.trim())
-                if (usuarioExistente != null) {
-                    _mensajeError.value = TextResources.ERROR_EMAIL_ALREADY_REGISTERED
-                } else {
-                    val idUsuario = repositorio.insertarUsuario(usuario.copy(email = usuario.email.trim()))
-                    _usuarioActual.value = usuario.copy(id = idUsuario, email = usuario.email.trim())
+                val response = repositorio.register(
+                    name = "${usuario.firstName} ${usuario.lastName}",
+                    email = usuario.email.trim(),
+                    password = usuario.password,
+                    rut = rut,
+                    phone = usuario.phone,
+                    address = usuario.address
+                )
+                
+                if (response != null && response.success) {
+                    // Guardar token
+                    response.token?.let { repositorio.saveToken(it) }
+                    
+                    // Guardar info del usuario
+                    response.usuario?.let { user ->
+                        repositorio.saveUserInfo(user.id, user.correo)
+                        val usuarioLocal = Usuario(
+                            id = user.id.toLong(),
+                            email = user.correo,
+                            password = "", // No guardamos la contraseña
+                            firstName = usuario.firstName,
+                            lastName = usuario.lastName,
+                            phone = user.telefono,
+                            address = user.direccion
+                        )
+                        _usuarioActual.value = usuarioLocal
+                    }
+                    
                     _estaLogueado.value = true
                     _mensajeError.value = null
                     _eventoNavegacion.emit(NavegacionEvento.NavegarAHome)
+                } else {
+                    _mensajeError.value = response?.mensaje ?: "Error al registrar usuario"
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
