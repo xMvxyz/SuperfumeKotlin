@@ -35,7 +35,8 @@ fun NavegacionSuperfume(navController: NavHostController) {
                 },
                 onNavigateToHome = {
                     navController.navigate(Constants.ROUTE_HOME) {
-                        popUpTo(Constants.ROUTE_LOGIN) { inclusive = true }
+                        popUpTo(Constants.ROUTE_LOGIN) { inclusive = false }
+                        launchSingleTop = true
                     }
                 }
             )
@@ -49,7 +50,8 @@ fun NavegacionSuperfume(navController: NavHostController) {
                 },
                 onNavigateToHome = {
                     navController.navigate(Constants.ROUTE_HOME) {
-                        popUpTo(Constants.ROUTE_REGISTER) { inclusive = true }
+                        popUpTo(Constants.ROUTE_LOGIN) { inclusive = false }
+                        launchSingleTop = true
                     }
                 }
             )
