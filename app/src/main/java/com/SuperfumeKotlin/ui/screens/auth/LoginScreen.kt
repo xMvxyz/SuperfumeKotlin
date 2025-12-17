@@ -57,9 +57,12 @@ fun LoginScreen(
         }
     }
     
-    LaunchedEffect(estaLogueado) {
-        if (estaLogueado) {
-            onNavigateToHome()
+    // Observar eventos de navegación de un solo uso
+    LaunchedEffect(Unit) {
+        viewModel.eventoNavegacion.collect { evento ->
+            when (evento) {
+                is NavegacionEvento.NavegarAHome -> onNavigateToHome()
+            }
         }
     }
     

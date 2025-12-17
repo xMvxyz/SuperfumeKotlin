@@ -13,6 +13,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
@@ -45,6 +48,10 @@ class ViewModelAutenticacion @Inject constructor(
     
     private val _formularioRegistro = MutableStateFlow(FormularioRegistro())
     val formularioRegistro: StateFlow<FormularioRegistro> = _formularioRegistro.asStateFlow()
+    
+    // Evento de navegación de un solo uso
+    private val _eventoNavegacion = MutableSharedFlow<NavegacionEvento>()
+    val eventoNavegacion: SharedFlow<NavegacionEvento> = _eventoNavegacion.asSharedFlow()
 
     /**
      * Crea un URI para una nueva imagen a ser capturada por la cámara.
@@ -101,6 +108,7 @@ class ViewModelAutenticacion @Inject constructor(
                     _usuarioActual.value = usuario
                     _estaLogueado.value = true
                     _mensajeError.value = null
+                    _eventoNavegacion.emit(NavegacionEvento.NavegarAHome)
                 } else {
                     _mensajeError.value = "Email o contraseña incorrectos"
                     _estaLogueado.value = false
@@ -159,6 +167,7 @@ class ViewModelAutenticacion @Inject constructor(
                     _usuarioActual.value = usuario.copy(id = idUsuario, email = usuario.email.trim())
                     _estaLogueado.value = true
                     _mensajeError.value = null
+                    _eventoNavegacion.emit(NavegacionEvento.NavegarAHome)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -250,3 +259,10 @@ data class FormularioRegistro(
     val telefono: String = "",
     val direccion: String = ""
 )
+
+/**
+ * Eventos de navegación de un solo uso
+ */
+sealed class NavegacionEvento {
+    object NavegarAHome : NavegacionEvento()
+}

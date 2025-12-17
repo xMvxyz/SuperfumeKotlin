@@ -57,9 +57,12 @@ fun RegisterScreen(
     val direccionValidation = remember(address) { FormValidators.validateAddress(address) }
     val passwordValidation = remember(password) { FormValidators.validatePassword(password) }
 
-    LaunchedEffect(estaLogueado) {
-        if (estaLogueado) {
-            onNavigateToHome()
+    // Observar eventos de navegación de un solo uso
+    LaunchedEffect(Unit) {
+        viewModel.eventoNavegacion.collect { evento ->
+            when (evento) {
+                is NavegacionEvento.NavegarAHome -> onNavigateToHome()
+            }
         }
     }
 
