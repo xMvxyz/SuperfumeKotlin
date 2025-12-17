@@ -18,6 +18,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+        // Nombre del APK generado
+        setProperty("archivesBaseName", "superfume")
     }
 
     buildTypes {
