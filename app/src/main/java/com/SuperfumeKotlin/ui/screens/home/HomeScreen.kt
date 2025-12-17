@@ -39,9 +39,11 @@ fun HomeScreen(
     onNavigateToCart: () -> Unit,
     onNavigateToProfile: () -> Unit,
     onNavigateToLogin: () -> Unit = {},
+    onNavigateToAdmin: () -> Unit = {},
     onNavigateToAddPerfume: () -> Unit,
     viewModel: ViewModelPerfume = hiltViewModel(),
-    authViewModel: com.SuperfumeKotlin.ui.viewmodel.ViewModelAutenticacion = hiltViewModel()
+    authViewModel: com.SuperfumeKotlin.ui.viewmodel.ViewModelAutenticacion = hiltViewModel(),
+    tokenManager: com.SuperfumeKotlin.util.TokenManager = hiltViewModel()
 ) {
     val perfumes by viewModel.perfumes.collectAsState()
     val estaCargando by viewModel.estaCargando.collectAsState()
@@ -49,6 +51,10 @@ fun HomeScreen(
     val categoriaSeleccionada by viewModel.categoriaSeleccionada.collectAsState()
     val generoSeleccionado by viewModel.generoSeleccionado.collectAsState()
     val estaLogueado by authViewModel.estaLogueado.collectAsState()
+    
+    // Obtener rol del usuario
+    val isAdmin = tokenManager.isAdmin()
+    val isCliente = tokenManager.isCliente()
     
     var searchText by remember { mutableStateOf("") }
     var showSearchBar by remember { mutableStateOf(false) }
@@ -90,23 +96,30 @@ fun HomeScreen(
                     }
                     IconButton(onClick = {
                         if (estaLogueado) {
-                            onNavigateToProfile()
+                            if (isAdmin) {
+                                onNavigateToAdmin()
+                            } else {
+                                onNavigateToProfile()
+                            }
                         } else {
                             onNavigateToLogin()
                         }
                     }) {
                         Icon(
                             Icons.Default.Person,
-                            contentDescription = "Perfil",
+                            contentDescription = if (isAdmin) "Admin" else "Perfil",
                             tint = Color.White
                         )
                     }
-                    IconButton(onClick = onNavigateToAddPerfume) {
-                        Icon(
-                            Icons.Default.Add,
-                            contentDescription = "Agregar Perfume",
-                            tint = Color.White
-                        )
+                    // Solo mostrar botón de agregar perfume para administradores
+                    if (isAdmin) {
+                        IconButton(onClick = onNavigateToAddPerfume) {
+                            Icon(
+                                Icons.Default.Add,
+                                contentDescription = "Agregar Perfume",
+                                tint = Color.White
+                            )
+                        }
                     }
                 }
             )

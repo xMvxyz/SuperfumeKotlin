@@ -105,13 +105,21 @@ class ViewModelAutenticacion @Inject constructor(
             try {
                 val response = repositorio.login(email.trim(), contraseña)
                 if (response != null && response.success) {
-                    // Guardar token
-                    response.token?.let { repositorio.saveToken(it) }
+                    // Guardar token y info del usuario con rol
+                    response.token?.let { token ->
+                        response.usuario?.let { user ->
+                            repositorio.saveToken(
+                                token = token,
+                                userId = user.id,
+                                email = user.correo,
+                                roleId = user.rol.id,
+                                roleName = user.rol.nombre
+                            )
+                        }
+                    }
                     
-                    // Guardar info del usuario
+                    // Crear usuario local
                     response.usuario?.let { user ->
-                        repositorio.saveUserInfo(user.id, user.correo)
-                        // Convertir UsuarioResponse a Usuario local
                         val usuario = Usuario(
                             id = user.id.toLong(),
                             email = user.correo,
@@ -187,22 +195,29 @@ class ViewModelAutenticacion @Inject constructor(
                 )
                 
                 if (response != null && response.success) {
-                    // Guardar token
-                    response.token?.let { repositorio.saveToken(it) }
-                    
-                    // Guardar info del usuario
-                    response.usuario?.let { user ->
-                        repositorio.saveUserInfo(user.id, user.correo)
-                        val usuarioLocal = Usuario(
-                            id = user.id.toLong(),
-                            email = user.correo,
-                            password = "", // No guardamos la contraseña
-                            firstName = usuario.firstName,
-                            lastName = usuario.lastName,
-                            phone = user.telefono,
-                            address = user.direccion
-                        )
-                        _usuarioActual.value = usuarioLocal
+                    // Guardar token y info del usuario con rol
+                    response.token?.let { token ->
+                        response.usuario?.let { user ->
+                            repositorio.saveToken(
+                                token = token,
+                                userId = user.id,
+                                email = user.correo,
+                                roleId = user.rol.id,
+                                roleName = user.rol.nombre
+                            )
+                            
+                            // Crear usuario local
+                            val usuarioLocal = Usuario(
+                                id = user.id.toLong(),
+                                email = user.correo,
+                                password = "", // No guardamos la contraseña
+                                firstName = usuario.firstName,
+                                lastName = usuario.lastName,
+                                phone = user.telefono,
+                                address = user.direccion
+                            )
+                            _usuarioActual.value = usuarioLocal
+                        }
                     }
                     
                     _estaLogueado.value = true

@@ -44,7 +44,10 @@ interface ApiService {
     suspend fun getUsuario(@Path("id") id: Int): Response<UsuarioResponse>
     
     @PUT("/api/usuario/{id}")
-    suspend fun updateUsuario(@Path("id") id: Int, @Body usuario: UsuarioResponse): Response<UsuarioResponse>
+    suspend fun updateUsuario(@Path("id") id: Int, @Body request: UpdateUserRequest): Response<UsuarioResponse>
+    
+    @PUT("/api/usuario/{id}/rol")
+    suspend fun changeUserRole(@Path("id") id: Int, @Body request: ChangeRoleRequest): Response<UsuarioResponse>
     
     @DELETE("/api/usuario/{id}")
     suspend fun deleteUsuario(@Path("id") id: Int): Response<Unit>

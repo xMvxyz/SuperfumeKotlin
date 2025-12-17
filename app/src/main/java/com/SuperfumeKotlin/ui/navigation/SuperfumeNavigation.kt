@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.SuperfumeKotlin.ui.screens.admin.AddPerfumeScreen
+import com.SuperfumeKotlin.ui.screens.admin.AdminScreen
 import com.SuperfumeKotlin.ui.screens.auth.LoginScreen
 import com.SuperfumeKotlin.ui.screens.auth.RegisterScreen
 import com.SuperfumeKotlin.ui.screens.cart.CartScreen
@@ -68,6 +69,12 @@ fun NavegacionSuperfume(navController: NavHostController) {
                 onNavigateToProfile = {
                     navController.navigate(Constants.ROUTE_PROFILE)
                 },
+                onNavigateToLogin = {
+                    navController.navigate(Constants.ROUTE_LOGIN)
+                },
+                onNavigateToAdmin = {
+                    navController.navigate(Constants.ROUTE_ADMIN)
+                },
                 onNavigateToAddPerfume = {
                     navController.navigate(Constants.ROUTE_ADD_PERFUME)
                 }
@@ -122,10 +129,22 @@ fun NavegacionSuperfume(navController: NavHostController) {
             )
         }
         
+        
         composable(Constants.ROUTE_ADD_PERFUME) {
             AddPerfumeScreen(
                 onNavigateBack = {
                     navController.popBackStack()
+                }
+            )
+        }
+        
+        composable(Constants.ROUTE_ADMIN) {
+            AdminScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
+                },
+                onNavigateToAddPerfume = {
+                    navController.navigate(Constants.ROUTE_ADD_PERFUME)
                 }
             )
         }

@@ -47,6 +47,8 @@ fun AddPerfumeScreen(
     var size by remember { mutableStateOf("100ml") }
     var gender by remember { mutableStateOf("Unisex") }
     var stock by remember { mutableStateOf("") }
+    var notas by remember { mutableStateOf("") }
+    var perfil by remember { mutableStateOf("") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     
     val estaCargando by viewModel.estaCargando.collectAsState()
@@ -293,17 +295,18 @@ fun AddPerfumeScreen(
                             // Submit Button
                             Button(
                                 onClick = {
-                                    val newPerfume = Perfume(
-                                        name = name,
-                                        brand = brand,
-                                        price = price.toIntOrNull() ?: 0,
-                                        description = description,
-                                        category = category,
-                                        size = size,
-                                        gender = gender,
-                                        stock = stock.toIntOrNull() ?: 0,
-                                        imageUri = imageUri?.toString()
-                                    )
+                                val newPerfume = Perfume(
+                                    name = name,
+                                    brand = brand,
+                                    price = price.toIntOrNull() ?: 0,
+                                    description = description,
+                                    gender = gender,
+                                    fragancia = category,
+                                    notas = notas.ifBlank { "Notas aromáticas" },
+                                    perfil = perfil.ifBlank { "Perfil aromático" },
+                                    stock = stock.toIntOrNull() ?: 0,
+                                    imageUri = imageUri?.toString()
+                                )
                             viewModel.agregarPerfume(newPerfume)
                                     showSuccessDialog = true
                                 },

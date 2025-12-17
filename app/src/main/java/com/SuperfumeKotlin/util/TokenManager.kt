@@ -33,6 +33,8 @@ class TokenManager @Inject constructor(
         private const val KEY_TOKEN = "jwt_token"
         private const val KEY_USER_ID = "user_id"
         private const val KEY_USER_EMAIL = "user_email"
+        private const val KEY_USER_ROLE_ID = "user_role_id"
+        private const val KEY_USER_ROLE_NAME = "user_role_name"
     }
 
     /**
@@ -64,12 +66,14 @@ class TokenManager @Inject constructor(
     }
 
     /**
-     * Guarda información del usuario
+     * Guarda información del usuario incluyendo rol
      */
-    fun saveUserInfo(userId: Int, email: String) {
+    fun saveUserInfo(userId: Int, email: String, roleId: Int, roleName: String) {
         sharedPreferences.edit()
             .putInt(KEY_USER_ID, userId)
             .putString(KEY_USER_EMAIL, email)
+            .putInt(KEY_USER_ROLE_ID, roleId)
+            .putString(KEY_USER_ROLE_NAME, roleName)
             .apply()
     }
 
@@ -85,6 +89,34 @@ class TokenManager @Inject constructor(
      */
     fun getUserEmail(): String? {
         return sharedPreferences.getString(KEY_USER_EMAIL, null)
+    }
+
+    /**
+     * Obtiene el ID del rol del usuario
+     */
+    fun getUserRoleId(): Int {
+        return sharedPreferences.getInt(KEY_USER_ROLE_ID, -1)
+    }
+
+    /**
+     * Obtiene el nombre del rol del usuario
+     */
+    fun getUserRoleName(): String? {
+        return sharedPreferences.getString(KEY_USER_ROLE_NAME, null)
+    }
+
+    /**
+     * Verifica si el usuario es administrador (rol ID = 1)
+     */
+    fun isAdmin(): Boolean {
+        return getUserRoleId() == 1
+    }
+
+    /**
+     * Verifica si el usuario es cliente (rol ID = 2)
+     */
+    fun isCliente(): Boolean {
+        return getUserRoleId() == 2
     }
 
     /**

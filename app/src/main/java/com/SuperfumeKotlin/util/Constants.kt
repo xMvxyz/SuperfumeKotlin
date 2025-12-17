@@ -56,6 +56,7 @@ object Constants {
     const val ROUTE_PERFUME_DETAIL = "perfume_detail/{perfumeId}"
     const val ROUTE_CART = "cart"
     const val ROUTE_PROFILE = "profile"
+    const val ROUTE_ADMIN = "admin"
     const val ROUTE_ADD_PERFUME = "add_perfume"
     const val ROUTE_EDIT_PROFILE = "edit_profile"
     

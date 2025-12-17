@@ -57,11 +57,12 @@ class RepositorioSuperfume @Inject constructor(
                             price = dto.precio.toInt(),
                             description = dto.descripcion ?: "",
                             imageUri = dto.imagenUrl,
-                            category = dto.fragancia ?: "General",
-                            size = "50ml", // Default
                             gender = dto.genero ?: "Unisex",
-                            isAvailable = dto.stock > 0,
-                            stock = dto.stock
+                            fragancia = dto.fragancia ?: "General",
+                            notas = dto.notas ?: "",
+                            perfil = dto.perfil ?: "",
+                            stock = dto.stock,
+                            isAvailable = dto.stock > 0
                         )
                     }
                     // Guardar en Room para uso offline
@@ -329,10 +330,11 @@ class RepositorioSuperfume @Inject constructor(
     }
     
     /**
-     * Guarda información del usuario
+     * Guarda el token JWT y la información del usuario incluyendo rol
      */
-    fun saveUserInfo(userId: Int, email: String) {
-        tokenManager.saveUserInfo(userId, email)
+    suspend fun saveToken(token: String, userId: Int, email: String, roleId: Int, roleName: String) {
+        tokenManager.saveToken(token)
+        tokenManager.saveUserInfo(userId, email, roleId, roleName)
     }
     
     /**
